@@ -16,6 +16,14 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #define min(a,b) ((a)<(b)?(a):(b))
 int numberthreads;
+
+//生成对应的参数
+double* ag;
+double* atg;
+double* c__g;
+double* sg;
+
+
 int lsame_(char *a, char *b){
 	if(*a==*b) return 1;
 	else return 0;
@@ -1136,30 +1144,85 @@ void test(char *side, char *pivot, char *direct, int *m,
 		printf("----------------------------------------------\n");
 }
 
-int main(int argc, char* argv[]){
-		printf("请输入dim的值\n");
-        int ldaa;
-		scanf("%d", &ldaa);
-        int *lda=&ldaa;
-	printf("请输入希望启动的线程数：\n");
-	scanf("%d",&numberthreads);
-        //测试n*n的矩阵
-        int mm = atoi(argv[1]);
-		int nn = atoi(argv[2]);
-        int *n=&nn;
-        int *m=&mm;
 
-		char sidet[2]={'L','R'};
-		char pivott[3]={'V','T','B'};
-		char directt[2]={'F','B'};
-        //遍历测试测试情况
-		for(int i=0;i<2;i++){
-			for(int j=0;j<3;j++){
-				for(int k=0;k<2;k++){
-					test(&sidet[i],&pivott[j],&directt[k],m,n,lda);
+//测试函数
+void test1(char *side, char *pivot, char *direct, int *m, int *n){
+		printf("%c,%c,%c:\n",*side,*pivot,*direct);
+		double start[2],stop[2];
+		double time[2];
+		
+		start[1]=omp_get_wtime();
+		dlasr_(side, pivot, direct, m, n, c__g, sg, atg, m);
+		stop[1]=omp_get_wtime();
+		time[1]=stop[1]-start[1];
+
+		start[0]=omp_get_wtime();
+	    dlasr_P(side, pivot, direct, m, n, c__g, sg, ag, m);
+		stop[0]=omp_get_wtime();
+		time[0]=stop[0]-start[0];
+		
+		double imp=time[1]/time[0];
+        // matShow(a,(*n));
+		// printf("----------------------------------------------\n");
+		// matShow(at,(*n));
+		//计算最大误差
+		// int errorNums=0;
+		// for(int j=0;j<*m;j++){
+		// 	for(int i=0;i<*n;i++){
+		// 		if((at[j+i*(*lda)] - a[j+i*(*lda)])!=0){
+		// 			errorNums++;
+		// 		}
+		// 		//maxNums=max(maxError,fabs(at[j+i*(*n)] - a[j+i*(*n)]) / fabs(at[j+i*(*n)]));
+		// 	}
+		// }
+		// printf("误差数：%d\n",errorNums);
+		printf("线程数为：%d;并行消耗时间：%f;串行消耗时间：%f;提升了%f倍\n",numberthreads,time[0],time[1],imp);
+		printf("----------------------------------------------\n");
+}
+
+int main(int argc, char* argv[]){
+	//生成对应的参数
+	ag =(double *)malloc(sizeof(double)*(40000*40000+2));
+	atg=(double *)malloc(sizeof(double)*(40000*40000+2));
+	c__g =(double *)malloc(sizeof(double)*(40000+2));
+	sg =(double *)malloc(sizeof(double)*(40000+2));
+
+	//generate
+	vecGene(c__g,40000);
+	vecGene(sg,40000);
+	//生成40000*40000的矩阵
+	matGene(ag,40000,40000,40000);
+
+	for(int j=0;j<40000;j++){
+		for(int i=0;i<40000;i++){
+			atg[j+i*(40000)]=ag[j+i*(40000)];
+		}
+	}
+
+
+	char sidet[2]={'L','R'};
+	char pivott[3]={'V','T','B'};
+	char directt[2]={'F','B'};
+	int mh[9]={10,100,1000,3000,6000,10000,15000,20000,40000};
+	int ml[9]={10,100,1000,3000,6000,10000,15000,20000,40000};
+	int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
+
+	//遍历测试测试情况
+	for(int i=0;i<2;i++){
+		for(int j=0;j<3;j++){
+			for(int k=0;k<2;k++){
+				for(int p=0;p<9;p++){
+					for(int q=0;q<9;q++){
+						for(int nt=0;nt<12;nt++)
+						{
+							numberthreads=numberThreads[nt];
+							test1(&sidet[i],&pivott[j],&directt[k],&mh[p],&ml[q]);
+						}
+					}
 				}
 			}
 		}
+	}
 finish:
-        return 0;
+	return 0;
 }
