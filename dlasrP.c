@@ -1104,8 +1104,8 @@ void test(char *side, char *pivot, char *direct, int *m,
 			}
 		}
 		printf("%c,%c,%c:\n",*side,*pivot,*direct);
-		long start[2],stop[2];
-		long time[2];
+		double start[2],stop[2];
+		double time[2];
 		
 		start[1]=omp_get_wtime();
 		dlasr_(side, pivot, direct, m, n, c__, s, at, lda);
@@ -1117,7 +1117,7 @@ void test(char *side, char *pivot, char *direct, int *m,
 		stop[0]=omp_get_wtime();
 		time[0]=stop[0]-start[0];
 		
-		double imp=((double)(time[1]))/((double)(time[0]));
+		double imp=time[1]/time[0];
         // matShow(a,(*n));
 		// printf("----------------------------------------------\n");
 		// matShow(at,(*n));
@@ -1132,7 +1132,7 @@ void test(char *side, char *pivot, char *direct, int *m,
 			}
 		}
 		printf("误差数：%d\n",errorNums);
-		printf("并行消耗时间：%ld;串行消耗时间：%ld;提升了%f倍\n",time[0],time[1],imp);
+		printf("并行消耗时间：%f;串行消耗时间：%f;提升了%f倍\n",time[0],time[1],imp);
 		printf("----------------------------------------------\n");
 }
 
