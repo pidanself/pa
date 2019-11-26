@@ -1194,9 +1194,12 @@ int main(int argc, char* argv[]){
 	sg =(double *)malloc(sizeof(double)*(maxn+2));
 
 	//generate
+	printf("开始生成第一个一维……\n");
 	vecGene(c__g,maxn);
+	printf("开始生成第二个一维……\n");
 	vecGene(sg,maxn);
 	//生成maxn*maxn的矩阵
+	printf("开始生成二维矩阵……\n");
 	matGene(ag,maxn,maxn,maxn);
 
 	for(int j=0;j<maxn;j++){
