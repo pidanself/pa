@@ -1183,7 +1183,10 @@ void test1(char *side, char *pivot, char *direct, int *m, int *n){
 }
 
 int main(int argc, char* argv[]){
-	int maxn=40000;
+	printf("请输入maxn的大小:\n");
+	int maxn;
+	scanf("%d",&maxn);
+	printf("开始生成各项参数:\n");
 	//生成对应的参数
 	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
 	atg=(double *)malloc(sizeof(double)*(maxn*maxn+2));
@@ -1210,6 +1213,7 @@ int main(int argc, char* argv[]){
 	int ml[9]={10,100,1000,3000};
 	int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
 
+	printf("开始测试:\n");
 	//遍历测试测试情况
 	for(int i=0;i<2;i++){
 		for(int j=0;j<3;j++){
