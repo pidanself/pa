@@ -1183,21 +1183,22 @@ void test1(char *side, char *pivot, char *direct, int *m, int *n){
 }
 
 int main(int argc, char* argv[]){
+	int maxn=40000;
 	//生成对应的参数
-	ag =(double *)malloc(sizeof(double)*(40000*40000+2));
-	atg=(double *)malloc(sizeof(double)*(40000*40000+2));
-	c__g =(double *)malloc(sizeof(double)*(40000+2));
-	sg =(double *)malloc(sizeof(double)*(40000+2));
+	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
+	atg=(double *)malloc(sizeof(double)*(maxn*maxn+2));
+	c__g =(double *)malloc(sizeof(double)*(maxn+2));
+	sg =(double *)malloc(sizeof(double)*(maxn+2));
 
 	//generate
-	vecGene(c__g,40000);
-	vecGene(sg,40000);
-	//生成40000*40000的矩阵
-	matGene(ag,40000,40000,40000);
+	vecGene(c__g,maxn);
+	vecGene(sg,maxn);
+	//生成maxn*maxn的矩阵
+	matGene(ag,maxn,maxn,maxn);
 
-	for(int j=0;j<40000;j++){
-		for(int i=0;i<40000;i++){
-			atg[j+i*(40000)]=ag[j+i*(40000)];
+	for(int j=0;j<maxn;j++){
+		for(int i=0;i<maxn;i++){
+			atg[j+i*(maxn)]=ag[j+i*(maxn)];
 		}
 	}
 
@@ -1205,8 +1206,8 @@ int main(int argc, char* argv[]){
 	char sidet[2]={'L','R'};
 	char pivott[3]={'V','T','B'};
 	char directt[2]={'F','B'};
-	int mh[9]={10,100,1000,3000,6000,10000,15000,20000,40000};
-	int ml[9]={10,100,1000,3000,6000,10000,15000,20000,40000};
+	int mh[9]={10,100,1000,3000};
+	int ml[9]={10,100,1000,3000};
 	int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
 
 	//遍历测试测试情况
