@@ -272,6 +272,7 @@ void vecShow(double* A, int size) {
 	if (lsame_(pivot, "V")) {
 	    if (lsame_(direct, "F")) {
 		i__1 = *m - 1;
+#pragma omp parallel for num_threads(num_threads) private(temp)
 		for (j = 1; j <= i__1; ++j) {
 		    ctemp = c__[j];
 		    stemp = s[j];
@@ -279,8 +280,6 @@ void vecShow(double* A, int size) {
 			i__2 = *n;
 			//a_dim1==1时，无法并行，因为a_dim1>=m>=1，若a_dim1==1则m==1,则无法执行到此，故a_dim1>1
 			//可以完全并行
-
-#pragma omp parallel for num_threads(num_threads) private(temp)
 			for (i__ = 1; i__ <= i__2; ++i__) {
 				temp = a[j + 1 + i__ * a_dim1];
 				//temp=a[j+1][i];
