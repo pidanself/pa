@@ -41,7 +41,7 @@ void printmatrix(double *t){
 //测试用
 void matGene(double* A, int lda , int m , int n) {
     srand(time(NULL));
-#pragma omp parallel for num_threads(30)
+#pragma omp parallel for num_threads(10)
     for(int j = 0; j < lda; j++) {
         for (int i = 0; i < n; i++) {
             double temp=rand()%100;//产生0-RAND_MAX的数
@@ -54,7 +54,7 @@ void matGene(double* A, int lda , int m , int n) {
 void vecGene(double* A, int size) {
         srand(time(NULL));
         //猜测生成0-1的数
-#pragma omp parallel for num_threads(30)
+#pragma omp parallel for num_threads(10)
         for (int i = 0; i < size; i++) {
                 A[i] = (double)rand()/RAND_MAX; //A[i]
         }
