@@ -1224,19 +1224,19 @@ int main(int argc, char* argv[]){
 	//遍历测试测试情况
 	for(int i=0;i<2;i++){
 		for(int j=0;j<3;j++){
-			for(int k=0;k<2;k++){
+			//for(int k=0;k<2;k++){
 				for(int p=0;p<9;p++){
 					for(int q=0;q<9;q++){
 						for(int nt=0;nt<12;nt++)
 						{
 							numberthreads=numberThreads[nt];
-							double t=test1(&sidet[i],&pivott[j],&directt[k],&mh[p],&ml[q]);
+							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
 							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[k],t) ;
 							// goto finish;
 						}
 					}
 				}
-			}
+			//}
 		}
 	}
 	fclose(fp);
