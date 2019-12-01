@@ -1148,7 +1148,7 @@ void test(char *side, char *pivot, char *direct, int *m,
 
 
 //测试函数
-void test1(char *side, char *pivot, char *direct, int *m, int *n){
+double test1(char *side, char *pivot, char *direct, int *m, int *n){
 		printf("%c,%c,%c:\n",*side,*pivot,*direct);
 		double start[2],stop[2];
 		double time[2];
@@ -1178,8 +1178,9 @@ void test1(char *side, char *pivot, char *direct, int *m, int *n){
 		// 	}
 		// }
 		// printf("误差数：%d\n",errorNums);
-		printf("线程数为：%d;并行消耗时间：%f;串行消耗时间：%f;提升了%f倍\n",numberthreads,time[0],time[1],imp);
-		printf("----------------------------------------------\n");
+		// printf("线程数为：%d;并行消耗时间：%f;串行消耗时间：%f;提升了%f倍\n",numberthreads,time[0],time[1],imp);
+		// printf("----------------------------------------------\n");
+		return imp;
 }
 
 int main(int argc, char* argv[]){
@@ -1215,6 +1216,9 @@ int main(int argc, char* argv[]){
 	int mh[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	int ml[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
+	FILE *fp = NULL ;
+	fp = fopen("testData.xls","w") ;
+    fprintf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\n","row: m","col: n","number of threads","side","pivot","direct","speedup" ) ;
 
 	printf("开始测试:\n");
 	//遍历测试测试情况
@@ -1226,13 +1230,16 @@ int main(int argc, char* argv[]){
 						for(int nt=0;nt<12;nt++)
 						{
 							numberthreads=numberThreads[nt];
-							test1(&sidet[i],&pivott[j],&directt[k],&mh[p],&ml[q]);
+							double t=test1(&sidet[i],&pivott[j],&directt[k],&mh[p],&ml[q]);
+							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[k],t) ;
+							goto finish;
 						}
 					}
 				}
 			}
 		}
 	}
+	fclose(fp);
 finish:
 	return 0;
 }
