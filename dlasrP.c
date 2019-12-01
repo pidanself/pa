@@ -1186,7 +1186,8 @@ double test1(char *side, char *pivot, char *direct, int *m, int *n){
 int main(int argc, char* argv[]){
 	printf("请输入maxn的大小:\n");
 	int maxn;
-	scanf("%d",&maxn);
+	//scanf("%d",&maxn);
+	maxn=40000;
 	printf("开始生成各项参数:\n");
 	//生成对应的参数
 	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
