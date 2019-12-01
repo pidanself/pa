@@ -1231,7 +1231,7 @@ int main(int argc, char* argv[]){
 						{
 							numberthreads=numberThreads[nt];
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
-							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[k],t) ;
+							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[0],t) ;
 							// goto finish;
 						}
 					}
