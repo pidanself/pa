@@ -1,0 +1,2 @@
+row: m	col: n	number of threads	side	pivot	direct	speedup
+10	10	2	L	V	F	0.078985
