@@ -1149,7 +1149,7 @@ void test(char *side, char *pivot, char *direct, int *m,
 
 //测试函数
 double test1(char *side, char *pivot, char *direct, int *m, int *n){
-		printf("%c,%c,%c:\n",*side,*pivot,*direct);
+		// printf("%c,%c,%c:\n",*side,*pivot,*direct);
 		double start[2],stop[2];
 		double time[2];
 		
@@ -1232,7 +1232,7 @@ int main(int argc, char* argv[]){
 							numberthreads=numberThreads[nt];
 							double t=test1(&sidet[i],&pivott[j],&directt[k],&mh[p],&ml[q]);
 							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[k],t) ;
-							goto finish;
+							// goto finish;
 						}
 					}
 				}
