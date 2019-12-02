@@ -337,7 +337,7 @@ void merge_sort(int l, int r, double* data, int N) {
 
     //i代表每次归并的区间长度，j代表需要归并的两个区间中最小的下标
     for (i = 2; i < r; i *= 2) {
-        #pragma omp parallel for private(j) shared(r, i)
+        #pragma omp parallel for private(j) shared(r, i) num_threads(2*numProcs-1)
         for (j = 0; j < r-i; j += i*2) {
             merge(j, j+i, (j+i*2 < r ? j+i*2 : r), data, temp);
         }
