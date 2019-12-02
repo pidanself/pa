@@ -384,8 +384,8 @@ int main(){
 	merge_sort(0,*n,d__2,*n);
 	stop[1]=omp_get_wtime();
 	time[1]=stop[1]-start[1];
-	vecShow(d__1,*n);
-	vecShow(d__2,*n);
+	// vecShow(d__1,*n);
+	// vecShow(d__2,*n);
 	printf("原函数时间：%f;并行归并函数时间：%f",time[0],time[1]);
 
 	return 0;
