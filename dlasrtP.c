@@ -304,7 +304,7 @@ void vecGene(double* A, int size) {
 
 
 //合并两个区间
-void merge(int l1, int r1, int r2, double* data, int* temp) {
+void merge(int l1, int r1, int r2, double* data, double* temp) {
     int top = l1, p = l1, q = r1;
     while (p < r1 || q < r2) {
         if (q >= r2 || (p < r1 && data[p] <= data[q])) {
@@ -320,8 +320,10 @@ void merge(int l1, int r1, int r2, double* data, int* temp) {
 }
 
 void merge_sort(int l, int r, double* data, int N) {
-    int i, j, t, *temp;
-    temp = (int*)malloc(N * sizeof(int));
+    int i, j;
+	double t;
+	double *temp;
+    temp = (double*)malloc(N * sizeof(double));
     //这里做了一些优化，预处理合并了单个的区间，略微提高的速度
     #pragma omp parallel for private(i, t) shared(N, data)
     for (i = 0; i < N/2; i++)
