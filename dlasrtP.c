@@ -327,7 +327,7 @@ void merge_sort(int l, int r, double* data, int N) {
 	double *temp;
     temp = (double*)malloc(N * sizeof(double));
     //这里做了一些优化，预处理合并了单个的区间，略微提高的速度
-    #pragma omp parallel for private(i, t) shared(N, data) num_threads(2)
+    #pragma omp parallel for private(i, t) shared(N, data) num_threads(2*numProcs-1)
     for (i = 0; i < N/2; i++)
         if (data[i*2] > data[i*2+1]) {
             t = data[i*2];
@@ -337,7 +337,7 @@ void merge_sort(int l, int r, double* data, int N) {
 
     //i代表每次归并的区间长度，j代表需要归并的两个区间中最小的下标
     for (i = 2; i < r; i *= 2) {
-        #pragma omp parallel for private(j) shared(r, i) num_threads(2)
+        #pragma omp parallel for private(j) shared(r, i) num_threads(2*numProcs-1)
         for (j = 0; j < r-i; j += i*2) {
             merge(j, j+i, (j+i*2 < r ? j+i*2 : r), data, temp);
         }
