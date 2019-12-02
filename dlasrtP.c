@@ -14,6 +14,8 @@
 #include <time.h>
 #include <omp.h>
 
+int numProcs;
+
 int lsame_(char *a, char *b){
 	if(*a==*b) return 1;
 	else return 0;
@@ -325,7 +327,7 @@ void merge_sort(int l, int r, double* data, int N) {
 	double *temp;
     temp = (double*)malloc(N * sizeof(double));
     //这里做了一些优化，预处理合并了单个的区间，略微提高的速度
-    #pragma omp parallel for private(i, t) shared(N, data)
+    #pragma omp parallel for private(i, t) shared(N, data) num_threads(2*numProcs-1)
     for (i = 0; i < N/2; i++)
         if (data[i*2] > data[i*2+1]) {
             t = data[i*2];
@@ -363,7 +365,7 @@ int main(){
 	//测量时间的参数
 	double start[2],stop[2];
 	double time[2];
-
+	numProcs=omp_get_num_procs();
 	printf("请输入带排序数组大小n：");
 	scanf("%d",n);
 	//生成随机数组
@@ -386,7 +388,7 @@ int main(){
 	time[1]=stop[1]-start[1];
 	// vecShow(d__1,*n);
 	// vecShow(d__2,*n);
-	printf("原函数时间：%f;并行归并函数时间：%f",time[0],time[1]);
+	printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
 
 	return 0;
 }
