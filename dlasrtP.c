@@ -340,12 +340,22 @@ void merge_sort(int l, int r, double* data, int N) {
     }
 }
 
+void vecShow(double* A, int size) {
+        for (int i = 0; i < size; i++) {
+                printf("%f,",A[i]); //A[i]
+        }
+		printf("\n");
+}
 
 
 int main(){
 	char *id;
 	int *n;
 	int *info;
+	id=(char *)malloc(sizeof(char)*(1));
+	n=(int *)malloc(sizeof(int)*(1));
+	info=(int *)malloc(sizeof(int)*(1));
+	*id='I';
 	double *d__1;
 	double *d__2;
 	//测量时间的参数
@@ -364,15 +374,16 @@ int main(){
 
 	//原函数
 	start[0]=omp_get_wtime();
-	//dlasrt_(id, n, d__1,info);
+	dlasrt_(id, n, d__1,info);
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
 	start[1]=omp_get_wtime();
-	//merge_sort(0,*n,d__2,*n);
+	merge_sort(0,*n,d__2,*n);
 	stop[1]=omp_get_wtime();
 	time[1]=stop[1]-start[1];
-
+	vecShow(d__1,*n);
+	vecShow(d__2,*n);
 	printf("原函数时间：%f;并行归并函数时间：%f",time[0],time[1]);
 
 	return 0;
