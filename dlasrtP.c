@@ -369,7 +369,7 @@ int main(){
 	time[0]=stop[0]-start[0];
 
 	start[1]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
+	//merge_sort(0,*n,d__2,*n);
 	stop[1]=omp_get_wtime();
 	time[1]=stop[1]-start[1];
 
