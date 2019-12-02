@@ -364,7 +364,7 @@ int main(){
 
 	//原函数
 	start[0]=omp_get_wtime();
-	dlasrt_(id, n, d__1,info);
+	//dlasrt_(id, n, d__1,info);
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
