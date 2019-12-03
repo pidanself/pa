@@ -483,6 +483,62 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 	}
 }
 
+//四核
+void QuickSortParallel4Core(double *p, int low, int high)//4核快排
+{
+	//p[0] = BOUNDARY / 2;
+	/*for (int i = low; i <= high; i++)
+	{
+		if (abs(p[i] - BOUNDARY / 2) < 10)
+		{
+			int temp = p[i];
+			p[i] = p[0];
+			p[0] = temp;
+			break;
+		}
+	}*/
+	int mid = Partition(p, low, high);
+	//p[low] = BOUNDARY / 4;
+	int quarter1 = Partition(p, low, mid - 1);
+	//p[mid + 1] = BOUNDARY / 4 * 3;
+	int quarter2 = Partition(p, mid + 1, high);
+#pragma omp parallel
+	{
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		//double start1 = omp_get_wtime();
+		QuickSortAverage(p, low, quarter1-1);
+		//double end1 = omp_get_wtime();
+		//printf("%lf\n", end1 - start1);
+	}
+#pragma omp section
+	{
+		//double start2 = omp_get_wtime();
+		QuickSortAverage(p, quarter1 + 1, mid-1);
+		//double end2 = omp_get_wtime();
+		//printf("%lf\n", end2 - start2);
+	}
+#pragma omp section
+	{
+		//double start3 = omp_get_wtime();
+		QuickSortAverage(p, mid+1, quarter2-1);
+		//double end3 = omp_get_wtime();
+		//printf("%lf\n", end3 - start3);
+	}
+#pragma omp section
+	{
+		//double start4 = omp_get_wtime();
+		QuickSortAverage(p, quarter2+1, high);
+		//double end4 = omp_get_wtime();
+		//printf("%lf\n", end4 - start4);
+	}
+	}
+	}
+}
+
+
 
 //合并两个区间
 void merge(int l1, int r1, int r2, double* data, double* temp) {
@@ -535,15 +591,17 @@ int main(){
 	double *d__1;
 	double *d__2;
 	double *d__3;
+	double *d__4;
 	//测量时间的参数
-	double start[3],stop[3];
-	double time[3];
+	double start[4],stop[4];
+	double time[4];
 	numProcs=omp_get_num_procs();
 	printf("请输入带排序数组大小n：");
 	scanf("%d",n);
 	//生成随机数组
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
 	d__3=(double *)malloc(sizeof(double)*(*n+2));
+	d__4=(double *)malloc(sizeof(double)*(*n+2));
 	d__1=vecGene(*n);
 	for(int i=0;i<*n;i++){
 		d__2[i]=d__1[i];
@@ -573,7 +631,13 @@ int main(){
 	stop[2]=omp_get_wtime();
 	time[2]=stop[2]-start[2];
 
-	printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f\n",time[0],time[1],time[2]);
+	//原函数并行（4线程）
+	start[3]=omp_get_wtime();
+	QuickSortParallel4Core(d__4,0,*n-1);
+	stop[3]=omp_get_wtime();
+	time[3]=stop[3]-start[3];
+
+	printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f;原函数并行（4线程）：%f\n",time[0],time[1],time[2],time[3]);
 	
 	return 0;
 }
