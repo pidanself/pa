@@ -505,15 +505,17 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	
 #pragma omp parallel
 	{
-		
+
 #pragma omp sections
 	{
 #pragma omp section
 	{
+		printf("-1");
 		quarter1 = Partition(p, low, mid - 1);
 	}
 #pragma omp section
 	{
+		printf("0");
 		quarter2 = Partition(p, mid + 1, high);
 	}
 	}
