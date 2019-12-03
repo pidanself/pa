@@ -562,7 +562,7 @@ int main(){
 	// // vecShow(d__2,*n);
 	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
 	double *a=vecGene(30);
-	double *b=(double *)malloc(sizeof(double)*(30));
+	double *b=(double *)malloc(sizeof(double)*(31));
 	for(int i=0;i<30;i++){
 		b[i]=a[i];
 	}
