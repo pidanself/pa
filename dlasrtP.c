@@ -570,11 +570,12 @@ int main(){
 		b[i]=a[i];
 	}
 	QuickSortParallel(a,0,n-1);
-	//vecShow(a,30);
+	vecShow(a,n);
+	printf("\n--------------");
 	// printf("开始测试");
 	merge_sort(0,n,b,n);
 	// printf("开始显示");
-	// vecShow(b,30);
+	vecShow(b,n);
 	for(int i=0;i<n;i++){
 		if(a[i]!=b[i]){
 			printf("wrong!\n");
