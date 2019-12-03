@@ -568,12 +568,14 @@ int main(){
 	}
 	QuickSortParallel(a,0,29);
 	vecShow(a,30);
+	printf("\n");
 	merge_sort(0,30,b,30);
-	for(int i=0;i<30;i++){
-		if(a[i]!=b[i]){
-			printf("wrong!\n");
-		}
-	}
-	printf("finish\n");
+	vecShow(b,30);
+	// for(int i=0;i<30;i++){
+	// 	if(a[i]!=b[i]){
+	// 		printf("wrong!\n");
+	// 	}
+	// }
+	// printf("finish\n");
 	return 0;
 }
