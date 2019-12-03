@@ -501,10 +501,22 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	int mid = Partition(p, low, high);
 	//p[low] = BOUNDARY / 4;
 	//p[mid + 1] = BOUNDARY / 4 * 3;
-	quarter1 = Partition(p, low, mid - 1);
-	quarter2 = Partition(p, mid + 1, high);
+	
+	
 #pragma omp parallel
 	{
+		
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter1 = Partition(p, low, mid - 1);
+	}
+#pragma omp section
+	{
+		quarter2 = Partition(p, mid + 1, high);
+	}
+	}
 		
 #pragma omp sections
 	{
