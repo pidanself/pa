@@ -569,7 +569,7 @@ int main(){
 	//QuickSortParallel(a,0,29);
 	//vecShow(a,30);
 	printf("开始测试");
-	merge_sort(0,29,b,30);
+	//merge_sort(0,29,b,30);
 	printf("开始显示");
 	vecShow(b,30);
 	// for(int i=0;i<30;i++){
