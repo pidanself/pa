@@ -561,18 +561,21 @@ int main(){
 	// // vecShow(d__1,*n);
 	// // vecShow(d__2,*n);
 	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
-	double *a=vecGene(30);
-	double *b=(double *)malloc(sizeof(double)*(30));
-	for(int i=0;i<30;i++){
+	int n;
+	printf("请输入n：\n");
+	scanf("%d",&n);
+	double *a=vecGene(n);
+	double *b=(double *)malloc(sizeof(double)*(n));
+	for(int i=0;i<n;i++){
 		b[i]=a[i];
 	}
-	QuickSortParallel(a,0,29);
+	QuickSortParallel(a,0,n-1);
 	//vecShow(a,30);
 	// printf("开始测试");
-	merge_sort(0,29,b,30);
+	merge_sort(0,n-1,b,n);
 	// printf("开始显示");
 	// vecShow(b,30);
-	for(int i=0;i<30;i++){
+	for(int i=0;i<n;i++){
 		if(a[i]!=b[i]){
 			printf("wrong!\n");
 		}
