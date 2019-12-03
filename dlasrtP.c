@@ -410,7 +410,7 @@ void QuickSortAverage(double *p, int low, int high)//快排+三数取中+插入
 	}//else时，正常执行快排
 	int first = low;
 	int last = high;
-	//int key = p[first];/*用字表的第一个记录作为枢轴*/
+	//double key = p[first];/*用字表的第一个记录作为枢轴*/
 	double key = SelectPivotMedianOfThree(p, low, high);
  
 	while (first < last)
@@ -486,6 +486,7 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 //四核
 void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 {
+	int quarter1,quarter2;
 	//p[0] = BOUNDARY / 2;
 	/*for (int i = low; i <= high; i++)
 	{
@@ -499,11 +500,29 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	}*/
 	int mid = Partition(p, low, high);
 	//p[low] = BOUNDARY / 4;
-	int quarter1 = Partition(p, low, mid - 1);
 	//p[mid + 1] = BOUNDARY / 4 * 3;
-	int quarter2 = Partition(p, mid + 1, high);
+	
 #pragma omp parallel
 	{
+//并行分割两部分数组
+#pragma omp sections
+{
+#pragma omp section
+	{
+		//double start1 = omp_get_wtime();
+		quarter1 = Partition(p, low, mid - 1);
+		//double end1 = omp_get_wtime();
+		//printf("%lf\n", end1 - start1);
+	}
+#pragma omp section
+	{
+		//double start1 = omp_get_wtime();
+		quarter2 = Partition(p, mid + 1, high);
+		//double end1 = omp_get_wtime();
+		//printf("%lf\n", end1 - start1);
+	}
+}
+
 #pragma omp sections
 	{
 #pragma omp section
@@ -536,6 +555,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	}
 	}
 	}
+
 }
 
 
