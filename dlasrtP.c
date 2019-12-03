@@ -601,7 +601,8 @@ void merge_sort(int l, int r, double* data, int N) {
 }
 
 
-int main(){
+double *test(int N){
+	double *time=(double *)malloc(sizeof(double)*(4));
 	char *id;
 	int *n;
 	int *info;
@@ -609,16 +610,13 @@ int main(){
 	n=(int *)malloc(sizeof(int)*(1));
 	info=(int *)malloc(sizeof(int)*(1));
 	*id='I';
+	//测量时间的参数
+	double start[4],stop[4];
+	*n=N;
 	double *d__1;
 	double *d__2;
 	double *d__3;
 	double *d__4;
-	//测量时间的参数
-	double start[4],stop[4];
-	double time[4];
-	numProcs=omp_get_num_procs();
-	printf("请输入带排序数组大小n：");
-	scanf("%d",n);
 	//生成随机数组
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
 	d__3=(double *)malloc(sizeof(double)*(*n+2));
@@ -630,7 +628,9 @@ int main(){
 	for(int i=0;i<*n;i++){
 		d__3[i]=d__1[i];
 	}
-
+	for(int i=0;i<*n;i++){
+		d__4[i]=d__1[i];
+	}
 	//原函数
 	start[0]=omp_get_wtime();
 	dlasrt_(id, n, d__1,info);
@@ -657,8 +657,35 @@ int main(){
 	QuickSortParallel4Core(d__4,0,*n-1);
 	stop[3]=omp_get_wtime();
 	time[3]=stop[3]-start[3];
+	return time;
+}
 
-	printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f;原函数并行（4线程）：%f\n",time[0],time[1],time[2],time[3]);
+int main(){
+	numProcs=omp_get_num_procs();
+	double time[4];
+	//打开xls文件
+	FILE *fp = NULL ;
+	fp = fopen("sortData.xls","w") ;
+    fprintf(fp,"n           kind\t0\t1\t2\t3\n") ;
+	//printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f;原函数并行（4线程）：%f\n",time[0],time[1],time[2],time[3]);
+	int N[]={10,20,40,80,160};//,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000};
 	
+	for(int i=0;i<sizeof(N)/sizeof(int);i++){
+		fprintf(fp,"%d\t",N[i]) ;
+		//初始化time
+		for(int j=0;j<(sizeof(time)/sizeof(double));j++){
+			time[j]=0;
+		}
+		//做三次计算
+		for(int j=0;j<3;j++){
+			double *temp=test(N[i]);
+			for(int jj=0;jj<(sizeof(time)/sizeof(double));jj++){
+				time[jj]+=temp[jj];
+			}
+		}
+		//输出到xls表格
+		fprintf(fp,"%f\t%f\t%f\t%f\n",time[0]/3,time[1]/3,time[2]/3,time[3]/3);
+	}
+	fclose(fp);
 	return 0;
 }
