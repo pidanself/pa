@@ -525,62 +525,55 @@ void merge_sort(int l, int r, double* data, int N) {
 
 
 int main(){
-	// char *id;
-	// int *n;
-	// int *info;
-	// id=(char *)malloc(sizeof(char)*(1));
-	// n=(int *)malloc(sizeof(int)*(1));
-	// info=(int *)malloc(sizeof(int)*(1));
-	// *id='I';
-	// double *d__1;
-	// double *d__2;
-	// //测量时间的参数
-	// double start[2],stop[2];
-	// double time[2];
+	char *id;
+	int *n;
+	int *info;
+	id=(char *)malloc(sizeof(char)*(1));
+	n=(int *)malloc(sizeof(int)*(1));
+	info=(int *)malloc(sizeof(int)*(1));
+	*id='I';
+	double *d__1;
+	double *d__2;
+	double *d__3;
+	//测量时间的参数
+	double start[3],stop[3];
+	double time[3];
 	numProcs=omp_get_num_procs();
-	// printf("请输入带排序数组大小n：");
-	// scanf("%d",n);
-	// //生成随机数组
-	// d__2 =(double *)malloc(sizeof(double)*(*n+2));
-	// d__1=vecGene(*n);
-	// for(int i=0;i<*n;i++){
-	// 	d__2[i]=d__1[i];
-	// }
-
-	// //原函数
-	// start[0]=omp_get_wtime();
-	// dlasrt_(id, n, d__1,info);
-	// stop[0]=omp_get_wtime();
-	// time[0]=stop[0]-start[0];
-
-	// //并行归并排序
-	// start[1]=omp_get_wtime();
-	// merge_sort(0,*n,d__2,*n);
-	// stop[1]=omp_get_wtime();
-	// time[1]=stop[1]-start[1];
-	// // vecShow(d__1,*n);
-	// // vecShow(d__2,*n);
-	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
-	int n;
-	printf("请输入n：\n");
-	scanf("%d",&n);
-	double *a=vecGene(n);
-	double *b=(double *)malloc(sizeof(double)*(n));
-	for(int i=0;i<n;i++){
-		b[i]=a[i];
+	printf("请输入带排序数组大小n：");
+	scanf("%d",n);
+	//生成随机数组
+	d__2 =(double *)malloc(sizeof(double)*(*n+2));
+	d__3=(double *)malloc(sizeof(double)*(*n+2));
+	d__1=vecGene(*n);
+	for(int i=0;i<*n;i++){
+		d__2[i]=d__1[i];
 	}
-	QuickSortParallel(a,0,n-1);
-	vecShow(a,n);
-	printf("\n--------------");
-	// printf("开始测试");
-	merge_sort(0,n,b,n);
-	// printf("开始显示");
-	vecShow(b,n);
-	for(int i=0;i<n;i++){
-		if(a[i]!=b[i]){
-			printf("wrong!\n");
-		}
+	for(int i=0;i<*n;i++){
+		d__3[i]=d__1[i];
 	}
-	printf("finish\n");
+
+	//原函数
+	start[0]=omp_get_wtime();
+	dlasrt_(id, n, d__1,info);
+	stop[0]=omp_get_wtime();
+	time[0]=stop[0]-start[0];
+
+	//并行归并排序
+	start[1]=omp_get_wtime();
+	merge_sort(0,*n,d__2,*n);
+	stop[1]=omp_get_wtime();
+	time[1]=stop[1]-start[1];
+	// vecShow(d__1,*n);
+	// vecShow(d__2,*n);
+
+	//原函数并行（2线程）
+	start[2]=omp_get_wtime();
+	merge_sort(0,*n,d__2,*n);
+	QuickSortParallel(d__3,0,*n-1);
+	stop[2]=omp_get_wtime();
+	time[2]=stop[2]-start[2];
+
+	printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f\n",time[0],time[1],time[2]);
+	
 	return 0;
 }
