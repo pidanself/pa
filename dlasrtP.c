@@ -13,13 +13,73 @@
 #include<stdlib.h>
 #include <time.h>
 #include <omp.h>
-
+const double MinProb = 1.0 / (RAND_MAX + 1);
 int numProcs;
 
 int lsame_(char *a, char *b){
 	if(*a==*b) return 1;
 	else return 0;
 }
+
+
+//生成随机数
+
+int happened(double probability)//probability 0~1
+{
+	if (probability <= 0)
+	{
+		return 0;
+	}
+	if (probability<MinProb)
+	{
+		return rand() == 0 && happened(probability*(RAND_MAX + 1));
+	}
+	if (rand() <= probability*(RAND_MAX + 1))
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int myrandom(int n)//产生0~n-1之间的等概率随机数
+{
+	int t = 0;
+	if (n <= RAND_MAX)
+	{
+		int R = RAND_MAX - (RAND_MAX + 1) % n;//尾数
+		t = rand();
+		while (t > R)
+		{
+			t = rand();
+		}
+		return t % n;
+	}
+	else
+	{
+		int r = n % (RAND_MAX + 1);//余数
+		if (happened((double)r / n))//取到余数的概率
+		{
+			return n - r + myrandom(r);
+		}
+		else
+		{
+			return rand() + myrandom(n / (RAND_MAX + 1))*(RAND_MAX + 1);
+		}
+	}
+}
+
+double* randomCreate(int N) {
+	int i = 0;
+	double *p;
+	p =(double*) malloc(N * sizeof(double));
+	srand(time(NULL));
+	for (i = 0; i < N; i++){
+		double f=(double)rand()/RAND_MAX;
+		p[i] = myrandom(N)*f;
+	}
+	return (p);
+}
+
 
 /* Subroutine */ int dlasrt_(char *id, int *n, double *d__, int *
 	info)
@@ -293,6 +353,176 @@ L110:
 
 } /* dlasrt_ */
 
+//原快排
+void sort(int *a, int left, int right)
+{
+    if(left >= right)/*如果左边索引大于或者等于右边的索引就代表已经整理完成一个组了*/
+    {
+        return ;
+    }
+    int i = left;
+    int j = right;
+    int key = a[left];
+     
+    while(i < j)                               /*控制在当组内寻找一遍*/
+    {
+        while(i < j && key <= a[j])
+        /*而寻找结束的条件就是，1，找到一个小于或者大于key的数（大于或小于取决于你想升
+        序还是降序）2，没有符合条件1的，并且i与j的大小没有反转*/ 
+        {
+            j--;/*向前寻找*/
+        }
+         
+        a[i] = a[j];
+        /*找到一个这样的数后就把它赋给前面的被拿走的i的值（如果第一次循环且key是
+        a[left]，那么就是给key）*/
+         
+        while(i < j && key >= a[i])
+        /*这是i在当组内向前寻找，同上，不过注意与key的大小关系停止循环和上面相反，
+        因为排序思想是把数往两边扔，所以左右两边的数大小与key的关系相反*/
+        {
+            i++;
+        }
+         
+        a[j] = a[i];
+    }
+     
+    a[i] = key;/*当在当组内找完一遍以后就把中间数key回归*/
+    sort(a, left, i - 1);/*最后用同样的方式对分出来的左边的小组进行同上的做法*/
+    sort(a, i + 1, right);/*用同样的方式对分出来的右边的小组进行同上的做法*/
+                       /*当然最后可能会出现很多分左右，直到每一组的i = j 为止*/
+}
+
+
+void InsertSort(double *p, int low, int high)//指定区间插入排序，即对数组p的指定位置进行插入排序
+{
+	double temp;
+	for (int i = low+1; i <= high; i++) {
+		for (int j = i; (j > low) && (p[j] < p[j - 1]); j--) {
+			temp = p[j];
+			p[j] = p[j - 1];
+			p[j - 1] = temp;
+		}
+	}
+}
+
+
+/*函数作用：取待排序序列中low、mid、high三个位置上数据，选取他们中间的那个数据作为枢轴*/
+double SelectPivotMedianOfThree(double *arr, int low, int high)//三数取中
+{
+	double temp;
+	int mid = low + ((high - low) >> 1);//计算数组中间的元素的下标  
+ 
+										//使用三数取中法选择枢轴  
+	if (arr[mid] > arr[high])//目标: arr[mid] <= arr[high]  
+	{
+		//swap(arr[mid], arr[high]);
+		temp = arr[mid];
+		arr[mid] = arr[high];
+		arr[high] = temp;
+	}
+	if (arr[low] > arr[high])//目标: arr[low] <= arr[high]  
+	{
+		//swap(arr[low], arr[high]);
+		temp = arr[low];
+		arr[low] = arr[high];
+		arr[high] = temp;
+	}
+	if (arr[mid] > arr[low]) //目标: arr[low] >= arr[mid]  
+	{
+		//swap(arr[mid], arr[low]);
+		temp = arr[mid];
+		arr[mid] = arr[low];
+		arr[low] = temp;
+	}
+	//此时，arr[mid] <= arr[low] <= arr[high]  
+	return arr[low];
+	//low的位置上保存这三个位置中间的值  
+	//分割时可以直接使用low位置的元素作为枢轴，而不用改变分割函数了  
+}
+
+void QuickSortAverage(double *p, int low, int high)//快排+三数取中+插入
+{
+	if (high - low + 1 < 20)
+	{
+		InsertSort(p, low, high);
+		return;
+	}//else时，正常执行快排
+	int first = low;
+	int last = high;
+	//int key = p[first];/*用字表的第一个记录作为枢轴*/
+	double key = SelectPivotMedianOfThree(p, low, high);
+ 
+	while (first < last)
+	{
+		while (first < last && p[last] >= key)
+		{
+			--last;
+		}
+ 
+		p[first] = p[last];/*将比第一个小的移到低端*/
+ 
+		while (first < last && p[first] <= key)
+		{
+			++first;
+		}
+ 
+		p[last] = p[first];
+		/*将比第一个大的移到高端*/
+	}
+	p[first] = key;/*枢轴记录到位*/
+	QuickSortAverage(p, low, first - 1);
+	QuickSortAverage(p, first + 1, high);
+}
+
+int Partition(double * a, int low, int high)//分隔
+{
+	int pivotkey = SelectPivotMedianOfThree(a, low, high);
+	while (low<high)
+	{
+		while (low<high && a[high] >= pivotkey)
+			--high;
+		a[low] = a[high];
+		while (low<high && a[low] <= pivotkey)
+			++low;
+		a[high] = a[low];
+	}
+	//此时low==high 
+	a[low] = pivotkey;
+	return low;
+}
+
+//尝试将原函数进行并行
+void QuickSortParallel(double *p, int low, int high)//2核快排
+{
+	//p[0] = BOUNDARY / 2;
+	/*for (int i = low; i <= high; i++)
+	{
+		if (abs(p[i] - BOUNDARY / 2) < 10)
+		{
+			int temp = p[i];
+			p[i] = p[0];
+			p[0] = temp;
+			break;
+		}
+	}*/
+	int mid = Partition(p, low, high);
+	#pragma omp parallel
+	{
+	#pragma omp sections
+	{
+	#pragma omp section
+	{
+		QuickSortAverage(p, low, mid-1);
+	}
+	#pragma omp section
+	{
+		QuickSortAverage(p, mid+1, high);
+	}
+	}
+	}
+}
+
 void vecGene(double* A, int size) {
         srand(time(NULL));
         //猜测生成0-1的数
@@ -353,42 +583,46 @@ void vecShow(double* A, int size) {
 
 
 int main(){
-	char *id;
-	int *n;
-	int *info;
-	id=(char *)malloc(sizeof(char)*(1));
-	n=(int *)malloc(sizeof(int)*(1));
-	info=(int *)malloc(sizeof(int)*(1));
-	*id='I';
-	double *d__1;
-	double *d__2;
-	//测量时间的参数
-	double start[2],stop[2];
-	double time[2];
-	numProcs=omp_get_num_procs();
-	printf("请输入带排序数组大小n：");
-	scanf("%d",n);
-	//生成随机数组
-	d__1 =(double *)malloc(sizeof(double)*(*n+2));
-	d__2 =(double *)malloc(sizeof(double)*(*n+2));
-	vecGene(d__1,*n);
-	for(int i=0;i<*n;i++){
-		d__2[i]=d__1[i];
-	}
+	// char *id;
+	// int *n;
+	// int *info;
+	// id=(char *)malloc(sizeof(char)*(1));
+	// n=(int *)malloc(sizeof(int)*(1));
+	// info=(int *)malloc(sizeof(int)*(1));
+	// *id='I';
+	// double *d__1;
+	// double *d__2;
+	// //测量时间的参数
+	// double start[2],stop[2];
+	// double time[2];
+	// numProcs=omp_get_num_procs();
+	// printf("请输入带排序数组大小n：");
+	// scanf("%d",n);
+	// //生成随机数组
+	// d__1 =(double *)malloc(sizeof(double)*(*n+2));
+	// d__2 =(double *)malloc(sizeof(double)*(*n+2));
+	// vecGene(d__1,*n);
+	// for(int i=0;i<*n;i++){
+	// 	d__2[i]=d__1[i];
+	// }
 
-	//原函数
-	start[0]=omp_get_wtime();
-	dlasrt_(id, n, d__1,info);
-	stop[0]=omp_get_wtime();
-	time[0]=stop[0]-start[0];
+	// //原函数
+	// start[0]=omp_get_wtime();
+	// dlasrt_(id, n, d__1,info);
+	// stop[0]=omp_get_wtime();
+	// time[0]=stop[0]-start[0];
 
-	start[1]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
-	stop[1]=omp_get_wtime();
-	time[1]=stop[1]-start[1];
-	// vecShow(d__1,*n);
-	// vecShow(d__2,*n);
-	printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
+	// start[1]=omp_get_wtime();
+	// merge_sort(0,*n,d__2,*n);
+	// stop[1]=omp_get_wtime();
+	// time[1]=stop[1]-start[1];
+	// // vecShow(d__1,*n);
+	// // vecShow(d__2,*n);
+	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
+
+	//测试生成随机数
+	double *d__1=randomCreate(10);
+	vecShow(d__1,10);
 
 	return 0;
 }
