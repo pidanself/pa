@@ -537,7 +537,7 @@ int main(){
 	// //测量时间的参数
 	// double start[2],stop[2];
 	// double time[2];
-	// numProcs=omp_get_num_procs();
+	numProcs=omp_get_num_procs();
 	// printf("请输入带排序数组大小n：");
 	// scanf("%d",n);
 	// //生成随机数组
@@ -562,21 +562,21 @@ int main(){
 	// // vecShow(d__2,*n);
 	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
 	double *a=vecGene(30);
-	double *b=(double *)malloc(sizeof(double)*(40));
+	double *b=(double *)malloc(sizeof(double)*(30));
 	for(int i=0;i<30;i++){
 		b[i]=a[i];
 	}
-	//QuickSortParallel(a,0,29);
+	QuickSortParallel(a,0,29);
 	//vecShow(a,30);
-	printf("开始测试");
+	// printf("开始测试");
 	merge_sort(0,29,b,30);
-	printf("开始显示");
-	vecShow(b,30);
-	// for(int i=0;i<30;i++){
-	// 	if(a[i]!=b[i]){
-	// 		printf("wrong!\n");
-	// 	}
-	// }
-	// printf("finish\n");
+	// printf("开始显示");
+	// vecShow(b,30);
+	for(int i=0;i<30;i++){
+		if(a[i]!=b[i]){
+			printf("wrong!\n");
+		}
+	}
+	printf("finish\n");
 	return 0;
 }
