@@ -510,12 +510,12 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	{
 #pragma omp section
 	{
-		printf("-1");
+		// printf("-1");
 		quarter1 = Partition(p, low, mid - 1);
 	}
 #pragma omp section
 	{
-		printf("0");
+		// printf("0");
 		quarter2 = Partition(p, mid + 1, high);
 	}
 	}
@@ -524,7 +524,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	{
 #pragma omp section
 	{
-		printf("1");
+		// printf("1");
 		//double start1 = omp_get_wtime();
 		QuickSortAverage(p, low, quarter1-1);
 		//double end1 = omp_get_wtime();
@@ -532,7 +532,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	}
 #pragma omp section
 	{
-		printf("2");
+		// printf("2");
 		//double start2 = omp_get_wtime();
 		QuickSortAverage(p, quarter1 + 1, mid-1);
 		//double end2 = omp_get_wtime();
@@ -540,7 +540,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	}
 #pragma omp section
 	{
-		printf("3");
+		// printf("3");
 		//double start3 = omp_get_wtime();
 		QuickSortAverage(p, mid+1, quarter2-1);
 		//double end3 = omp_get_wtime();
@@ -548,7 +548,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	}
 #pragma omp section
 	{
-		printf("4");
+		// printf("4");
 		//double start4 = omp_get_wtime();
 		QuickSortAverage(p, quarter2+1, high);
 		//double end4 = omp_get_wtime();
