@@ -13,7 +13,6 @@
 #include<stdlib.h>
 #include <time.h>
 #include <omp.h>
-const double MinProb = 1.0 / (RAND_MAX + 1);
 int numProcs;
 
 int lsame_(char *a, char *b){
@@ -23,63 +22,24 @@ int lsame_(char *a, char *b){
 
 
 //生成随机数
-
-int happened(double probability)//probability 0~1
-{
-	if (probability <= 0)
-	{
-		return 0;
-	}
-	if (probability<MinProb)
-	{
-		return rand() == 0 && happened(probability*(RAND_MAX + 1));
-	}
-	if (rand() <= probability*(RAND_MAX + 1))
-	{
-		return 1;
-	}
-	return 0;
-}
-
-int myrandom(int n)//产生0~n-1之间的等概率随机数
-{
-	int t = 0;
-	if (n <= RAND_MAX)
-	{
-		int R = RAND_MAX - (RAND_MAX + 1) % n;//尾数
-		t = rand();
-		while (t > R)
-		{
-			t = rand();
-		}
-		return t % n;
-	}
-	else
-	{
-		int r = n % (RAND_MAX + 1);//余数
-		if (happened((double)r / n))//取到余数的概率
-		{
-			return n - r + myrandom(r);
-		}
-		else
-		{
-			return rand() + myrandom(n / (RAND_MAX + 1))*(RAND_MAX + 1);
-		}
-	}
-}
-
-double* randomCreate(int N) {
-	int i = 0;
-	double *p;
-	p =(double*) malloc(N * sizeof(double));
+double* vecGene(int size) {
+	double* A=(double *)malloc(size*sizeof(double));
 	srand(time(NULL));
-	for (i = 0; i < N; i++){
-		double f=(double)rand()/RAND_MAX;
-		p[i] = myrandom(N)*f;
+	//生成0～size-1的随机数
+	for (int i = 0; i < size; i++) {
+		double temp=rand();//产生0-RAND_MAX的数
+		double f=(double)rand()/RAND_MAX;//产生0-1的数
+		A[i] = temp*f; //产生A[j][i]
 	}
-	return (p);
+	return A;
 }
 
+void vecShow(double* A, int size) {
+        for (int i = 0; i < size; i++) {
+                printf("%f,",A[i]); //A[i]
+        }
+		printf("\n");
+}
 
 /* Subroutine */ int dlasrt_(char *id, int *n, double *d__, int *
 	info)
@@ -523,17 +483,6 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 	}
 }
 
-void vecGene(double* A, int size) {
-        srand(time(NULL));
-        //猜测生成0-1的数
-#pragma omp parallel for num_threads(2)
-        for (int i = 0; i < size; i++) {
-			double temp=rand()%100;//产生0-RAND_MAX的数
-            double f=(double)rand()/RAND_MAX;//产生0-1的数
-            A[i] = temp*f; //产生A[j][i]
-        }
-}
-
 
 //合并两个区间
 void merge(int l1, int r1, int r2, double* data, double* temp) {
@@ -574,13 +523,6 @@ void merge_sort(int l, int r, double* data, int N) {
     }
 }
 
-void vecShow(double* A, int size) {
-        for (int i = 0; i < size; i++) {
-                printf("%f,",A[i]); //A[i]
-        }
-		printf("\n");
-}
-
 
 int main(){
 	// char *id;
@@ -599,9 +541,8 @@ int main(){
 	// printf("请输入带排序数组大小n：");
 	// scanf("%d",n);
 	// //生成随机数组
-	// d__1 =(double *)malloc(sizeof(double)*(*n+2));
 	// d__2 =(double *)malloc(sizeof(double)*(*n+2));
-	// vecGene(d__1,*n);
+	// d__1=vecGene(*n);
 	// for(int i=0;i<*n;i++){
 	// 	d__2[i]=d__1[i];
 	// }
@@ -612,6 +553,7 @@ int main(){
 	// stop[0]=omp_get_wtime();
 	// time[0]=stop[0]-start[0];
 
+	// //并行归并排序
 	// start[1]=omp_get_wtime();
 	// merge_sort(0,*n,d__2,*n);
 	// stop[1]=omp_get_wtime();
@@ -619,10 +561,9 @@ int main(){
 	// // vecShow(d__1,*n);
 	// // vecShow(d__2,*n);
 	// printf("原函数时间：%f;并行归并函数时间：%f\n",time[0],time[1]);
-
-	//测试生成随机数
-	double *d__1=randomCreate(10);
-	vecShow(d__1,10);
+	double *a=vecGene(30);
+	QuickSortParallel(a,0,29);
+	vecShow(a,30);
 
 	return 0;
 }
