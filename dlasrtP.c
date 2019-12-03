@@ -504,6 +504,7 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	
 #pragma omp parallel
 	{
+		printf("23333");
 #pragma omp sections
 	{
 #pragma omp section
