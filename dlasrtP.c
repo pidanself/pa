@@ -437,7 +437,7 @@ void QuickSortAverage(double *p, int low, int high)//快排+三数取中+插入
 
 int Partition(double * a, int low, int high)//分隔
 {
-	int pivotkey = SelectPivotMedianOfThree(a, low, high);
+	double pivotkey = SelectPivotMedianOfThree(a, low, high);
 	while (low<high)
 	{
 		while (low<high && a[high] >= pivotkey)
