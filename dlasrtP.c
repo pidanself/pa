@@ -24,9 +24,9 @@ int lsame_(char *a, char *b){
 //生成随机数
 double* vecGene(int size) {
 	//创建数组空间
-	printf("创建第一个数组空间……\n");
+	// printf("创建第一个数组空间……\n");
 	double* A=(double *)malloc(size*sizeof(double));
-	printf("创建第一个数组空间成功……\n");
+	// printf("创建第一个数组空间成功……\n");
 	srand(time(NULL));
 	//生成0～size-1的随机数
 	for (int i = 0; i < size; i++) {
@@ -1087,17 +1087,20 @@ double *test(int N){
 	double *d__1;
 	double *d__2;
 	//生成随机数组
-	printf("开始生成随机数……\n");
+	// printf("开始生成随机数……\n");
 	d__1=vecGene(*n);
-	printf("生成随机数成功……\n");
-	printf("创建第二个数组空间……\n");
+	// printf("生成随机数成功……\n");
+	// printf("创建第二个数组空间……\n");
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
-	printf("创建第二个数组空间成功……\n");
+	// printf("创建第二个数组空间成功……\n");
 	copy(d__1,d__2,*n);
-	
+	//前面排除没有任何问题
+	printf("创建数完成！");
 	//原函数
 	start[0]=omp_get_wtime();
+	printf("开始排序……\n");
 	dlasrt_(id, n, d__2,info);
+	printf("排序成功\n");
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
