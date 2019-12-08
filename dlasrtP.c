@@ -14,7 +14,7 @@
 #include <time.h>
 #include <omp.h>
 int numProcs;
-
+double *d__1;
 int lsame_(char *a, char *b){
 	if(*a==*b) return 1;
 	else return 0;
@@ -1084,82 +1084,82 @@ double *test(int N){
 	//测量时间的参数
 	double start[8],stop[8];
 	*n=N;
-	double *d__1;
+	
 	double *d__2;
 	//生成随机数组
 	// printf("开始生成随机数……\n");
-	d__1=vecGene(*n);
 	// printf("生成随机数成功……\n");
 	// printf("创建第二个数组空间……\n");
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
 	// printf("创建第二个数组空间成功……\n");
 	copy(d__1,d__2,*n);
 	//前面排除没有任何问题
-	printf("创建数完成！");
+	// printf("创建数完成！");
 	//原函数
 	start[0]=omp_get_wtime();
-	printf("开始排序……\n");
+	// printf("开始排序……\n");
 	dlasrt_(id, n, d__2,info);
-	printf("排序成功\n");
+	// printf("排序成功\n");
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
-// copy(d__1,d__2,*n);
-// 	//16线程并行归并排序
-// 	numProcs=omp_get_num_procs();
-// 	start[1]=omp_get_wtime();
-// 	merge_sort(0,*n,d__2,*n);
-// 	stop[1]=omp_get_wtime();
-// 	time[1]=stop[1]-start[1];
+copy(d__1,d__2,*n);
+	//16线程并行归并排序
+	numProcs=omp_get_num_procs();
+	start[1]=omp_get_wtime();
+	merge_sort(0,*n,d__2,*n);
+	stop[1]=omp_get_wtime();
+	time[1]=stop[1]-start[1];
 
-// copy(d__1,d__2,*n);
-// 	//31线程并行归并排序
-// 	numProcs=2*omp_get_num_procs()-1;
-// 	start[2]=omp_get_wtime();
-// 	merge_sort(0,*n,d__2,*n);
-// 	stop[2]=omp_get_wtime();
-// 	time[2]=stop[2]-start[2];
+copy(d__1,d__2,*n);
+	//31线程并行归并排序
+	numProcs=2*omp_get_num_procs()-1;
+	start[2]=omp_get_wtime();
+	merge_sort(0,*n,d__2,*n);
+	stop[2]=omp_get_wtime();
+	time[2]=stop[2]-start[2];
 
-// copy(d__1,d__2,*n);
-// 	//原函数并行（2线程）
-// 	start[3]=omp_get_wtime();
-// 	QuickSortParallel(d__2,0,*n-1);
-// 	stop[3]=omp_get_wtime();
-// 	time[3]=stop[3]-start[3];
+copy(d__1,d__2,*n);
+	//原函数并行（2线程）
+	start[3]=omp_get_wtime();
+	QuickSortParallel(d__2,0,*n-1);
+	stop[3]=omp_get_wtime();
+	time[3]=stop[3]-start[3];
 
-// copy(d__1,d__2,*n);
-// 	//原函数并行（4线程）
-// 	start[4]=omp_get_wtime();
-// 	QuickSortParallel4Core(d__2,0,*n-1);
-// 	stop[4]=omp_get_wtime();
-// 	time[4]=stop[4]-start[4];
+copy(d__1,d__2,*n);
+	//原函数并行（4线程）
+	start[4]=omp_get_wtime();
+	QuickSortParallel4Core(d__2,0,*n-1);
+	stop[4]=omp_get_wtime();
+	time[4]=stop[4]-start[4];
 
-// copy(d__1,d__2,*n);
-// 	//原函数并行（8线程）
-// 	start[5]=omp_get_wtime();
-// 	QuickSortParallel8Core(d__2,0,*n-1);
-// 	stop[5]=omp_get_wtime();
-// 	time[5]=stop[5]-start[5];
+copy(d__1,d__2,*n);
+	//原函数并行（8线程）
+	start[5]=omp_get_wtime();
+	QuickSortParallel8Core(d__2,0,*n-1);
+	stop[5]=omp_get_wtime();
+	time[5]=stop[5]-start[5];
 
-// copy(d__1,d__2,*n);
-// 	//原函数并行（16线程）
-// 	start[6]=omp_get_wtime();
-// 	QuickSortParallel16Core(d__2,0,*n-1);
-// 	stop[6]=omp_get_wtime();
-// 	time[6]=stop[6]-start[6];
+copy(d__1,d__2,*n);
+	//原函数并行（16线程）
+	start[6]=omp_get_wtime();
+	QuickSortParallel16Core(d__2,0,*n-1);
+	stop[6]=omp_get_wtime();
+	time[6]=stop[6]-start[6];
 
-// copy(d__1,d__2,*n);
-// 	//原函数并行（32线程）
-// 	start[7]=omp_get_wtime();
-// 	QuickSortParallel32Core(d__2,0,*n-1);
-// 	stop[7]=omp_get_wtime();
-// 	time[7]=stop[7]-start[7];
+copy(d__1,d__2,*n);
+	//原函数并行（32线程）
+	start[7]=omp_get_wtime();
+	QuickSortParallel32Core(d__2,0,*n-1);
+	stop[7]=omp_get_wtime();
+	time[7]=stop[7]-start[7];
 
 	return time;
 }
 
 int main(){
 	double time[8];
+	d__1=vecGene(1000000000);
 	//打开xls文件
 	FILE *fp = NULL ;
 	fp = fopen("sortData.xls","w") ;
@@ -1169,7 +1169,7 @@ int main(){
 	//40～2000000000
 	int N[]={40,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000};//,2000000000};
 	
-	for(int i=sizeof(N)/sizeof(int)-1;i<sizeof(N)/sizeof(int);i++){
+	for(int i=0;i<sizeof(N)/sizeof(int);i++){
 		fprintf(fp,"%d\t",N[i]) ;
 		//初始化time
 		for(int j=0;j<(sizeof(time)/sizeof(double));j++){
@@ -1178,12 +1178,12 @@ int main(){
 		//做三次计算
 		for(int j=0;j<3;j++){
 			double *temp=test(N[i]);
-			// for(int jj=0;jj<(sizeof(time)/sizeof(double));jj++){
-			// 	time[jj]+=temp[jj];
-			// }
+			for(int jj=0;jj<(sizeof(time)/sizeof(double));jj++){
+				time[jj]+=temp[jj];
+			}
 		}
 		//输出到xls表格
-		//fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",time[0]/3,time[1]/3,time[2]/3,time[3]/3,time[4]/3,time[5]/3,time[6]/3,time[7]/3);
+		fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",time[0]/3,time[1]/3,time[2]/3,time[3]/3,time[4]/3,time[5]/3,time[6]/3,time[7]/3);
 	}
 	fclose(fp);
 	return 0;
