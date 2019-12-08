@@ -487,35 +487,17 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 {
 	int quarter1,quarter2;
-	//p[0] = BOUNDARY / 2;
-	/*for (int i = low; i <= high; i++)
-	{
-		if (abs(p[i] - BOUNDARY / 2) < 10)
-		{
-			int temp = p[i];
-			p[i] = p[0];
-			p[0] = temp;
-			break;
-		}
-	}*/
 	int mid = Partition(p, low, high);
-	//p[low] = BOUNDARY / 4;
-	//p[mid + 1] = BOUNDARY / 4 * 3;
-	
-	
 #pragma omp parallel
 	{
-
 #pragma omp sections
 	{
 #pragma omp section
 	{
-		// printf("-1");
 		quarter1 = Partition(p, low, mid - 1);
 	}
 #pragma omp section
 	{
-		// printf("0");
 		quarter2 = Partition(p, mid + 1, high);
 	}
 	}
@@ -524,42 +506,523 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 	{
 #pragma omp section
 	{
-		// printf("1");
-		//double start1 = omp_get_wtime();
 		QuickSortAverage(p, low, quarter1-1);
-		//double end1 = omp_get_wtime();
-		//printf("%lf\n", end1 - start1);
 	}
 #pragma omp section
 	{
-		// printf("2");
-		//double start2 = omp_get_wtime();
 		QuickSortAverage(p, quarter1 + 1, mid-1);
-		//double end2 = omp_get_wtime();
-		//printf("%lf\n", end2 - start2);
 	}
 #pragma omp section
 	{
-		// printf("3");
-		//double start3 = omp_get_wtime();
 		QuickSortAverage(p, mid+1, quarter2-1);
-		//double end3 = omp_get_wtime();
-		//printf("%lf\n", end3 - start3);
 	}
 #pragma omp section
 	{
-		// printf("4");
-		//double start4 = omp_get_wtime();
 		QuickSortAverage(p, quarter2+1, high);
-		//double end4 = omp_get_wtime();
-		//printf("%lf\n", end4 - start4);
 	}
+	}
+	}
+}
+
+//八线程
+void QuickSortParallel8Core(double *p, int low, int high)//4核快排
+{
+	int quarter1,quarter2,quarter3,quarter4,quarter5,quarter6,quarter7;
+	quarter4 = Partition(p, low, high);
+#pragma omp parallel
+	{
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter2 = Partition(p, low, quarter4 - 1);
+	}
+#pragma omp section
+	{
+		quarter6 = Partition(p, quarter4 + 1, high);
 	}
 	}
 
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter1 = Partition(p, low, quarter2 - 1);
+	}
+#pragma omp section
+	{
+		quarter3 = Partition(p, quarter2 + 1, quarter4 - 1);
+	}
+#pragma omp section
+	{
+		quarter5 = Partition(p, quarter4 + 1, quarter6-1);
+	}
+#pragma omp section
+	{
+		quarter7 = Partition(p, quarter6 + 1, high);
+	}
+	}
+		
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		QuickSortAverage(p, low, quarter1-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter1 + 1, quarter2-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter2+1, quarter3-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter3+1, quarter4-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter4+1, quarter5-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter5 + 1, quarter6-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter6+1, quarter7-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter7+1, high);
+	}
+	}
+	}
+}
+
+//十六线程
+void QuickSortParallel16Core(double *p, int low, int high)//4核快排
+{
+	int quarter[16];//1~15
+	quarter[8] = Partition(p, low, high);
+#pragma omp parallel
+	{
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[4] = Partition(p, low, quarter[8] - 1);
+	}
+#pragma omp section
+	{
+		quarter[12] = Partition(p, quarter[8] + 1, high);
+	}
+	}
+
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[2] = Partition(p, low, quarter[4] - 1);
+	}
+#pragma omp section
+	{
+		quarter[6] = Partition(p, quarter[4] + 1, quarter[8] - 1);
+	}
+#pragma omp section
+	{
+		quarter[10] = Partition(p, quarter[8] + 1, quarter[12]-1);
+	}
+#pragma omp section
+	{
+		quarter[14] = Partition(p, quarter[12] + 1, high);
+	}
+	}
+
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[1] = Partition(p, low, quarter[2] - 1);
+	}
+#pragma omp section
+	{
+		quarter[3] = Partition(p, quarter[2] + 1, quarter[4] - 1);
+	}
+#pragma omp section
+	{
+		quarter[5] = Partition(p, quarter[4] + 1, quarter[6]-1);
+	}
+#pragma omp section
+	{
+		quarter[7] = Partition(p, quarter[6] + 1, quarter[8]-1);
+	}
+#pragma omp section
+	{
+		quarter[9] = Partition(p, quarter[8] + 1, quarter[10] - 1);
+	}
+#pragma omp section
+	{
+		quarter[11] = Partition(p, quarter[10] + 1, quarter[12] - 1);
+	}
+#pragma omp section
+	{
+		quarter[13] = Partition(p, quarter[12] + 1, quarter[14]-1);
+	}
+#pragma omp section
+	{
+		quarter[15] = Partition(p, quarter[14] + 1, high);
+	}	
+	}
+		
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		QuickSortAverage(p, low, quarter[1]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[1] + 1, quarter[2]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[2]+1, quarter[3]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[3]+1, quarter[4]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[4]+1, quarter[5]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[5] + 1, quarter[6]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[6]+1, quarter[7]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[7]+1, quarter[8]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[8] + 1, quarter[9]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[9] + 1, quarter[10]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[10]+1, quarter[11]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[11]+1, quarter[12]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[12]+1, quarter[13]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[13] + 1, quarter[14]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[14]+1, quarter[15]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[15]+1, high);
+	}
+	}
+	}
 }
 
 
+//三十二线程
+void QuickSortParallel32Core(double *p, int low, int high)//4核快排
+{
+	int quarter[32];//1~31
+	quarter[16] = Partition(p, low, high);
+#pragma omp parallel
+	{
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[8] = Partition(p, low, quarter[16] - 1);
+	}
+#pragma omp section
+	{
+		quarter[24] = Partition(p, quarter[16] + 1, high);
+	}
+	}
+
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[4] = Partition(p, low, quarter[8] - 1);
+	}
+#pragma omp section
+	{
+		quarter[12] = Partition(p, quarter[8] + 1, quarter[16] - 1);
+	}
+#pragma omp section
+	{
+		quarter[20] = Partition(p, quarter[16] + 1, quarter[24]-1);
+	}
+#pragma omp section
+	{
+		quarter[28] = Partition(p, quarter[24] + 1, high);
+	}
+	}
+
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[2] = Partition(p, low, quarter[4] - 1);
+	}
+#pragma omp section
+	{
+		quarter[6] = Partition(p, quarter[4] + 1, quarter[8] - 1);
+	}
+#pragma omp section
+	{
+		quarter[10] = Partition(p, quarter[8] + 1, quarter[12]-1);
+	}
+#pragma omp section
+	{
+		quarter[14] = Partition(p, quarter[12] + 1, quarter[16]-1);
+	}
+#pragma omp section
+	{
+		quarter[18] = Partition(p, quarter[16] + 1, quarter[20] - 1);
+	}
+#pragma omp section
+	{
+		quarter[22] = Partition(p, quarter[20] + 1, quarter[24] - 1);
+	}
+#pragma omp section
+	{
+		quarter[26] = Partition(p, quarter[24] + 1, quarter[28]-1);
+	}
+#pragma omp section
+	{
+		quarter[30] = Partition(p, quarter[28] + 1, high);
+	}	
+	}
+
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		quarter[1] = Partition(p, low, quarter[2] - 1);
+	}
+#pragma omp section
+	{
+		quarter[3] = Partition(p, quarter[2] + 1, quarter[4] - 1);
+	}
+#pragma omp section
+	{
+		quarter[5] = Partition(p, quarter[4] + 1, quarter[6]-1);
+	}
+#pragma omp section
+	{
+		quarter[7] = Partition(p, quarter[6] + 1, quarter[8]-1);
+	}
+#pragma omp section
+	{
+		quarter[9] = Partition(p, quarter[8] + 1, quarter[10] - 1);
+	}
+#pragma omp section
+	{
+		quarter[11] = Partition(p, quarter[10] + 1, quarter[12] - 1);
+	}
+#pragma omp section
+	{
+		quarter[13] = Partition(p, quarter[12] + 1, quarter[14]-1);
+	}
+#pragma omp section
+	{
+		quarter[15] = Partition(p, quarter[14] + 1, quarter[16]-1);
+	}	
+#pragma omp section
+	{
+		quarter[17] = Partition(p, quarter[16] + 1, quarter[18] - 1);
+	}
+#pragma omp section
+	{
+		quarter[19] = Partition(p, quarter[18] + 1, quarter[20] - 1);
+	}
+#pragma omp section
+	{
+		quarter[21] = Partition(p, quarter[20] + 1, quarter[22]-1);
+	}
+#pragma omp section
+	{
+		quarter[23] = Partition(p, quarter[22] + 1, quarter[24]-1);
+	}
+#pragma omp section
+	{
+		quarter[25] = Partition(p, quarter[24] + 1, quarter[26] - 1);
+	}
+#pragma omp section
+	{
+		quarter[27] = Partition(p, quarter[26] + 1, quarter[28] - 1);
+	}
+#pragma omp section
+	{
+		quarter[29] = Partition(p, quarter[28] + 1, quarter[30]-1);
+	}
+#pragma omp section
+	{
+		quarter[31] = Partition(p, quarter[30] + 1, high);
+	}	
+	}
+		
+#pragma omp sections
+	{
+#pragma omp section
+	{
+		QuickSortAverage(p, low, quarter[1]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[1] + 1, quarter[2]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[2]+1, quarter[3]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[3]+1, quarter[4]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[4]+1, quarter[5]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[5] + 1, quarter[6]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[6]+1, quarter[7]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[7]+1, quarter[8]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[8] + 1, quarter[9]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[9] + 1, quarter[10]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[10]+1, quarter[11]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[11]+1, quarter[12]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[12]+1, quarter[13]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[13] + 1, quarter[14]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[14]+1, quarter[15]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[15]+1, quarter[16]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[16]+1, quarter[17]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[17] + 1, quarter[18]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[18]+1, quarter[19]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[19]+1, quarter[20]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[20]+1, quarter[21]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[21] + 1, quarter[22]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[22]+1, quarter[23]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[23]+1, quarter[24]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[24] + 1, quarter[25]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[25] + 1, quarter[26]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[26]+1, quarter[27]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[27]+1, quarter[28]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[28]+1, quarter[29]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[29] + 1, quarter[30]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[30]+1, quarter[31]-1);
+	}
+#pragma omp section
+	{
+		QuickSortAverage(p, quarter[31]+1, high);
+	}
+	}
+	}
+}
 
 //合并两个区间
 void merge(int l1, int r1, int r2, double* data, double* temp) {
@@ -583,7 +1046,7 @@ void merge_sort(int l, int r, double* data, int N) {
 	double *temp;
     temp = (double*)malloc(N * sizeof(double));
     //这里做了一些优化，预处理合并了单个的区间，略微提高的速度
-    #pragma omp parallel for private(i, t) shared(N, data) num_threads(2*numProcs-1)
+    #pragma omp parallel for private(i, t) shared(N, data) num_threads(numProcs)
     for (i = 0; i < N/2; i++)
         if (data[i*2] > data[i*2+1]) {
             t = data[i*2];
@@ -593,7 +1056,7 @@ void merge_sort(int l, int r, double* data, int N) {
 
     //i代表每次归并的区间长度，j代表需要归并的两个区间中最小的下标
     for (i = 2; i < r; i *= 2) {
-        #pragma omp parallel for private(j) shared(r, i) num_threads(2*numProcs-1)
+        #pragma omp parallel for private(j) shared(r, i) num_threads(numProcs)
         for (j = 0; j < r-i; j += i*2) {
             merge(j, j+i, (j+i*2 < r ? j+i*2 : r), data, temp);
         }
@@ -602,7 +1065,7 @@ void merge_sort(int l, int r, double* data, int N) {
 
 
 double *test(int N){
-	double *time=(double *)malloc(sizeof(double)*(4));
+	double *time=(double *)malloc(sizeof(double)*(8));
 	char *id;
 	int *n;
 	int *info;
@@ -611,64 +1074,95 @@ double *test(int N){
 	info=(int *)malloc(sizeof(int)*(1));
 	*id='I';
 	//测量时间的参数
-	double start[4],stop[4];
+	double start[8],stop[8];
 	*n=N;
 	double *d__1;
 	double *d__2;
 	double *d__3;
-	double *d__4;
+	double *d__4;double *d__5;double *d__6;double *d__7;double *d__8;
 	//生成随机数组
+	d__1=vecGene(*n);
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
 	d__3=(double *)malloc(sizeof(double)*(*n+2));
 	d__4=(double *)malloc(sizeof(double)*(*n+2));
-	d__1=vecGene(*n);
+	d__5=(double *)malloc(sizeof(double)*(*n+2));
+	d__6=(double *)malloc(sizeof(double)*(*n+2));
+	d__7=(double *)malloc(sizeof(double)*(*n+2));
+	d__8=(double *)malloc(sizeof(double)*(*n+2));
 	for(int i=0;i<*n;i++){
 		d__2[i]=d__1[i];
-	}
-	for(int i=0;i<*n;i++){
 		d__3[i]=d__1[i];
-	}
-	for(int i=0;i<*n;i++){
 		d__4[i]=d__1[i];
+		d__5[i]=d__1[i];
+		d__6[i]=d__1[i];
+		d__7[i]=d__1[i];
+		d__8[i]=d__1[i];
 	}
+	
 	//原函数
 	start[0]=omp_get_wtime();
 	dlasrt_(id, n, d__1,info);
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
-	//并行归并排序
+	//16线程并行归并排序
+	numProcs=omp_get_num_procs();
 	start[1]=omp_get_wtime();
 	merge_sort(0,*n,d__2,*n);
 	stop[1]=omp_get_wtime();
 	time[1]=stop[1]-start[1];
-	// vecShow(d__1,*n);
-	// vecShow(d__2,*n);
 
-	//原函数并行（2线程）
+	//31线程并行归并排序
+	numProcs=2*omp_get_num_procs()-1;
 	start[2]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
-	QuickSortParallel(d__3,0,*n-1);
+	merge_sort(0,*n,d__3,*n);
 	stop[2]=omp_get_wtime();
 	time[2]=stop[2]-start[2];
 
-	//原函数并行（4线程）
+	//原函数并行（2线程）
 	start[3]=omp_get_wtime();
-	QuickSortParallel4Core(d__4,0,*n-1);
+	merge_sort(0,*n,d__2,*n);
+	QuickSortParallel(d__4,0,*n-1);
 	stop[3]=omp_get_wtime();
 	time[3]=stop[3]-start[3];
+
+	//原函数并行（4线程）
+	start[4]=omp_get_wtime();
+	QuickSortParallel4Core(d__5,0,*n-1);
+	stop[4]=omp_get_wtime();
+	time[4]=stop[4]-start[4];
+
+	//原函数并行（8线程）
+	start[5]=omp_get_wtime();
+	QuickSortParallel8Core(d__6,0,*n-1);
+	stop[5]=omp_get_wtime();
+	time[5]=stop[5]-start[5];
+
+	//原函数并行（16线程）
+	start[6]=omp_get_wtime();
+	QuickSortParallel16Core(d__7,0,*n-1);
+	stop[6]=omp_get_wtime();
+	time[6]=stop[6]-start[6];
+
+	//原函数并行（32线程）
+	start[7]=omp_get_wtime();
+	QuickSortParallel32Core(d__8,0,*n-1);
+	stop[7]=omp_get_wtime();
+	time[7]=stop[7]-start[7];
+
 	return time;
 }
 
 int main(){
-	numProcs=omp_get_num_procs();
-	double time[4];
+	double time[8];
 	//打开xls文件
 	FILE *fp = NULL ;
 	fp = fopen("sortData.xls","w") ;
-    fprintf(fp,"n           kind\t0\t1\t2\t3\n") ;
-	//printf("原函数时间：%f;并行归并函数时间：%f;原函数并行（2线程）：%f;原函数并行（4线程）：%f\n",time[0],time[1],time[2],time[3]);
-	int N[]={10,20,40,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000};
+	//0-原函数，1-16线程并行归并，2-31线程并行归并，3-2线程并行原函数，4-4线程并行原函数，5-8线程并行原函数
+	//6-16线程并行原函数，7-31线程并行原函数
+    fprintf(fp,"n           kind\t0\t1\t2\t3\t4\t5\t6\t7\n") ;
+	//40～2000000000
+	int N[]={40,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000,2000000000};
 	
 	for(int i=0;i<sizeof(N)/sizeof(int);i++){
 		fprintf(fp,"%d\t",N[i]) ;
