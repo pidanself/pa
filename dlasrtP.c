@@ -1063,6 +1063,11 @@ void merge_sort(int l, int r, double* data, int N) {
     }
 }
 
+void copy(double* d__1,double* d__2,int n){
+	for(int i=0;i<n;i++){
+		d__2[i]=d__1[i];
+	}
+}
 
 double *test(int N){
 	double *time=(double *)malloc(sizeof(double)*(8));
@@ -1078,33 +1083,18 @@ double *test(int N){
 	*n=N;
 	double *d__1;
 	double *d__2;
-	double *d__3;
-	double *d__4;double *d__5;double *d__6;double *d__7;double *d__8;
 	//生成随机数组
 	d__1=vecGene(*n);
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
-	d__3=(double *)malloc(sizeof(double)*(*n+2));
-	d__4=(double *)malloc(sizeof(double)*(*n+2));
-	d__5=(double *)malloc(sizeof(double)*(*n+2));
-	d__6=(double *)malloc(sizeof(double)*(*n+2));
-	d__7=(double *)malloc(sizeof(double)*(*n+2));
-	d__8=(double *)malloc(sizeof(double)*(*n+2));
-	for(int i=0;i<*n;i++){
-		d__2[i]=d__1[i];
-		d__3[i]=d__1[i];
-		d__4[i]=d__1[i];
-		d__5[i]=d__1[i];
-		d__6[i]=d__1[i];
-		d__7[i]=d__1[i];
-		d__8[i]=d__1[i];
-	}
+	copy(d__1,d__2,*n);
 	
 	//原函数
 	start[0]=omp_get_wtime();
-	dlasrt_(id, n, d__1,info);
+	dlasrt_(id, n, d__2,info);
 	stop[0]=omp_get_wtime();
 	time[0]=stop[0]-start[0];
 
+copy(d__1,d__2,*n);
 	//16线程并行归并排序
 	numProcs=omp_get_num_procs();
 	start[1]=omp_get_wtime();
@@ -1112,41 +1102,46 @@ double *test(int N){
 	stop[1]=omp_get_wtime();
 	time[1]=stop[1]-start[1];
 
+copy(d__1,d__2,*n);
 	//31线程并行归并排序
 	numProcs=2*omp_get_num_procs()-1;
 	start[2]=omp_get_wtime();
-	merge_sort(0,*n,d__3,*n);
+	merge_sort(0,*n,d__2,*n);
 	stop[2]=omp_get_wtime();
 	time[2]=stop[2]-start[2];
 
+copy(d__1,d__2,*n);
 	//原函数并行（2线程）
 	start[3]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
-	QuickSortParallel(d__4,0,*n-1);
+	QuickSortParallel(d__2,0,*n-1);
 	stop[3]=omp_get_wtime();
 	time[3]=stop[3]-start[3];
 
+copy(d__1,d__2,*n);
 	//原函数并行（4线程）
 	start[4]=omp_get_wtime();
-	QuickSortParallel4Core(d__5,0,*n-1);
+	QuickSortParallel4Core(d__2,0,*n-1);
 	stop[4]=omp_get_wtime();
 	time[4]=stop[4]-start[4];
 
+copy(d__1,d__2,*n);
 	//原函数并行（8线程）
 	start[5]=omp_get_wtime();
-	QuickSortParallel8Core(d__6,0,*n-1);
+	QuickSortParallel8Core(d__2,0,*n-1);
 	stop[5]=omp_get_wtime();
 	time[5]=stop[5]-start[5];
 
+copy(d__1,d__2,*n);
 	//原函数并行（16线程）
 	start[6]=omp_get_wtime();
-	QuickSortParallel16Core(d__7,0,*n-1);
+	QuickSortParallel16Core(d__2,0,*n-1);
 	stop[6]=omp_get_wtime();
 	time[6]=stop[6]-start[6];
 
+copy(d__1,d__2,*n);
 	//原函数并行（32线程）
 	start[7]=omp_get_wtime();
-	QuickSortParallel32Core(d__8,0,*n-1);
+	QuickSortParallel32Core(d__2,0,*n-1);
 	stop[7]=omp_get_wtime();
 	time[7]=stop[7]-start[7];
 
@@ -1164,7 +1159,7 @@ int main(){
 	//40～2000000000
 	int N[]={40,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000,2000000000};
 	
-	for(int i=0;i<sizeof(N)/sizeof(int);i++){
+	for(int i=sizeof(N)/sizeof(int)-1;i<sizeof(N)/sizeof(int);i++){
 		fprintf(fp,"%d\t",N[i]) ;
 		//初始化time
 		for(int j=0;j<(sizeof(time)/sizeof(double));j++){
