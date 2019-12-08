@@ -23,7 +23,10 @@ int lsame_(char *a, char *b){
 
 //生成随机数
 double* vecGene(int size) {
+	//创建数组空间
+	printf("创建第一个数组空间……\n");
 	double* A=(double *)malloc(size*sizeof(double));
+	printf("创建第一个数组空间成功……\n");
 	srand(time(NULL));
 	//生成0～size-1的随机数
 	for (int i = 0; i < size; i++) {
@@ -1084,8 +1087,12 @@ double *test(int N){
 	double *d__1;
 	double *d__2;
 	//生成随机数组
+	printf("开始生成随机数……\n");
 	d__1=vecGene(*n);
+	printf("生成随机数成功……\n");
+	printf("创建第二个数组空间……\n");
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
+	printf("创建第二个数组空间成功……\n");
 	copy(d__1,d__2,*n);
 	
 	//原函数
