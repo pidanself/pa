@@ -1099,6 +1099,7 @@ double *test(int N){
 	//前面排除没有任何问题
 	// printf("创建数完成！");
 
+	printf("原函数排序开始……\n");
 	//原函数
 	start[index]=omp_get_wtime();
 	// printf("开始排序……\n");
@@ -1107,7 +1108,9 @@ double *test(int N){
 	stop[index]=omp_get_wtime();
 	time[index]=stop[index]-start[index];
 	index++;
+	printf("原函数排序结束……\n");
 
+	printf("归并排序开始……\n");
 	//并行归并排序：2、4、8、16、32
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
 		copy(d__1,d__2,*n);
@@ -1118,6 +1121,7 @@ double *test(int N){
 		time[index]=stop[index]-start[index];
 		index++;
 	}
+	printf("归并排序结束……\n");
 
 // copy(d__1,d__2,*n);
 // 	//16线程并行归并排序
@@ -1135,6 +1139,7 @@ double *test(int N){
 // 	stop[2]=omp_get_wtime();
 // 	time[2]=stop[2]-start[2];
 
+printf("原函数并行排序开始……\n");
 copy(d__1,d__2,*n);
 	//原函数并行（2线程）
 	start[index]=omp_get_wtime();
@@ -1174,13 +1179,16 @@ copy(d__1,d__2,*n);
 	stop[index]=omp_get_wtime();
 	time[index]=stop[index]-start[index];
 	index++;
+printf("原函数并行排序结束……\n");
 
 	return time;
 }
 
 int main(){
 	double time[8];
+	printf("开始生成随机数……\n");
 	d__1=vecGene(1000000000);
+	printf("随机数生成成功……\n");
 	//打开xls文件
 	FILE *fp = NULL ;
 	fp = fopen("sortData.xls","w") ;
