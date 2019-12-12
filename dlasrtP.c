@@ -1125,6 +1125,7 @@ double *test(int N){
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
 		printf("%d\n",i);
 		copy(d__1,d__2,*n);
+		printf("复制完成");
 		numProcs=i;
 		start[index]=omp_get_wtime();
 		merge_sort(0,*n,d__2,*n);
