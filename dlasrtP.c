@@ -1078,6 +1078,7 @@ void merge_sort(int l, int r, double* data, int N) {
 
 void copy(double* d__1,double* d__2,int n){
 	for(int i=0;i<n;i++){
+		printf("第%d个\n",i);
 		d__2[i]=d__1[i];
 	}
 }
@@ -1125,7 +1126,6 @@ double *test(int N){
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
 		printf("%d\n",i);
 		copy(d__1,d__2,*n);
-		printf("复制完成");
 		numProcs=i;
 		start[index]=omp_get_wtime();
 		merge_sort(0,*n,d__2,*n);
