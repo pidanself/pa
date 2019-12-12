@@ -1110,19 +1110,19 @@ double *test(int N){
 	index++;
 	printf("原函数排序结束……\n");
 
-	printf("归并排序开始……\n");
-	//并行归并排序：2、4、8、16、32
-	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
-		printf("%d\n",i);
-		copy(d__1,d__2,*n);
-		numProcs=i;
-		start[index]=omp_get_wtime();
-		merge_sort(0,*n,d__2,*n);
-		stop[index]=omp_get_wtime();
-		time[index]=stop[index]-start[index];
-		index++;
-	}
-	printf("归并排序结束……\n");
+	// printf("归并排序开始……\n");
+	// //并行归并排序：2、4、8、16、32
+	// for(int i=2;i<=2*omp_get_num_procs();i=i*2){
+	// 	printf("%d\n",i);
+	// 	copy(d__1,d__2,*n);
+	// 	numProcs=i;
+	// 	start[index]=omp_get_wtime();
+	// 	merge_sort(0,*n,d__2,*n);
+	// 	stop[index]=omp_get_wtime();
+	// 	time[index]=stop[index]-start[index];
+	// 	index++;
+	// }
+	// printf("归并排序结束……\n");
 
 copy(d__1,d__2,*n);
 	//16线程并行归并排序
