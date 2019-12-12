@@ -1113,6 +1113,7 @@ double *test(int N){
 	printf("归并排序开始……\n");
 	//并行归并排序：2、4、8、16、32
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
+		printf("%d\n",i);
 		copy(d__1,d__2,*n);
 		numProcs=i;
 		start[index]=omp_get_wtime();
