@@ -13,6 +13,7 @@
 #include<stdlib.h>
 #include <time.h>
 #include <omp.h>
+#include<string.h>
 int numProcs;
 double *d__1;
 int lsame_(char *a, char *b){
@@ -1076,6 +1077,7 @@ void merge_sort(int l, int r, double* data, int N) {
     }
 }
 
+//我真是作死要自己写拷贝函数
 void copy(double* d__1,double* d__2,int n){
 	for(int i=0;i<n;i++){
 		printf("第%d个\n",i);
@@ -1106,7 +1108,7 @@ double *test(int N){
 	// printf("创建第二个数组空间……\n");
 	d__2 =(double *)malloc(sizeof(double)*(*n+2));
 	// printf("创建第二个数组空间成功……\n");
-	copy(d__1,d__2,*n);
+	memcpy(d__2,d__1,(*n)*sizeof(double));
 	//前面排除没有任何问题
 	// printf("创建数完成！");
 
@@ -1125,7 +1127,7 @@ double *test(int N){
 	//并行归并排序：2、4、8、16、32
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
 		printf("%d\n",i);
-		copy(d__1,d__2,*n);
+		memcpy(d__2,d__1,(*n)*sizeof(double));
 		numProcs=i;
 		start[index]=omp_get_wtime();
 		merge_sort(0,*n,d__2,*n);
@@ -1152,7 +1154,7 @@ double *test(int N){
 // 	time[2]=stop[2]-start[2];
 
 printf("原函数并行排序开始……\n");
-copy(d__1,d__2,*n);
+memcpy(d__2,d__1,(*n)*sizeof(double));
 	//原函数并行（2线程）
 	start[index]=omp_get_wtime();
 	QuickSortParallel(d__2,0,*n-1);
@@ -1160,7 +1162,7 @@ copy(d__1,d__2,*n);
 	time[index]=stop[index]-start[index];
 	index++;
 
-copy(d__1,d__2,*n);
+memcpy(d__2,d__1,(*n)*sizeof(double));
 	//原函数并行（4线程）
 	start[index]=omp_get_wtime();
 	QuickSortParallel4Core(d__2,0,*n-1);
@@ -1168,7 +1170,7 @@ copy(d__1,d__2,*n);
 	time[index]=stop[index]-start[index];
 	index++;
 
-copy(d__1,d__2,*n);
+memcpy(d__2,d__1,(*n)*sizeof(double));
 	//原函数并行（8线程）
 	start[index]=omp_get_wtime();
 	QuickSortParallel8Core(d__2,0,*n-1);
@@ -1176,7 +1178,7 @@ copy(d__1,d__2,*n);
 	time[index]=stop[index]-start[index];
 	index++;
 
-copy(d__1,d__2,*n);
+memcpy(d__2,d__1,(*n)*sizeof(double));
 	//原函数并行（16线程）
 	start[index]=omp_get_wtime();
 	QuickSortParallel16Core(d__2,0,*n-1);
@@ -1184,7 +1186,7 @@ copy(d__1,d__2,*n);
 	time[index]=stop[index]-start[index];
 	index++;
 
-copy(d__1,d__2,*n);
+memcpy(d__2,d__1,(*n)*sizeof(double));
 	//原函数并行（32线程）
 	start[index]=omp_get_wtime();
 	QuickSortParallel32Core(d__2,0,*n-1);
