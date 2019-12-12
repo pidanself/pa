@@ -469,6 +469,8 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 			break;
 		}
 	}*/
+	//设置线程数
+	omp_set_num_threads(2);
 	int mid = Partition(p, low, high);
 	#pragma omp parallel
 	{
@@ -490,6 +492,8 @@ void QuickSortParallel(double *p, int low, int high)//2核快排
 void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 {
 	int quarter1,quarter2;
+	//设置线程数
+	omp_set_num_threads(4);
 	int mid = Partition(p, low, high);
 #pragma omp parallel
 	{
@@ -531,6 +535,8 @@ void QuickSortParallel4Core(double *p, int low, int high)//4核快排
 void QuickSortParallel8Core(double *p, int low, int high)//4核快排
 {
 	int quarter1,quarter2,quarter3,quarter4,quarter5,quarter6,quarter7;
+	//设置线程数
+	omp_set_num_threads(8);
 	quarter4 = Partition(p, low, high);
 #pragma omp parallel
 	{
@@ -609,6 +615,8 @@ void QuickSortParallel16Core(double *p, int low, int high)//4核快排
 {
 	int quarter[16];//1~15
 	quarter[8] = Partition(p, low, high);
+	//设置线程数
+	omp_set_num_threads(16);
 #pragma omp parallel
 	{
 #pragma omp sections
@@ -755,6 +763,8 @@ void QuickSortParallel32Core(double *p, int low, int high)//4核快排
 {
 	int quarter[32];//1~31
 	quarter[16] = Partition(p, low, high);
+	//设置线程数
+	omp_set_num_threads(32);
 #pragma omp parallel
 	{
 #pragma omp sections
@@ -1110,35 +1120,35 @@ double *test(int N){
 	index++;
 	printf("原函数排序结束……\n");
 
-	// printf("归并排序开始……\n");
-	// //并行归并排序：2、4、8、16、32
-	// for(int i=2;i<=2*omp_get_num_procs();i=i*2){
-	// 	printf("%d\n",i);
-	// 	copy(d__1,d__2,*n);
-	// 	numProcs=i;
-	// 	start[index]=omp_get_wtime();
-	// 	merge_sort(0,*n,d__2,*n);
-	// 	stop[index]=omp_get_wtime();
-	// 	time[index]=stop[index]-start[index];
-	// 	index++;
-	// }
-	// printf("归并排序结束……\n");
+	printf("归并排序开始……\n");
+	//并行归并排序：2、4、8、16、32
+	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
+		printf("%d\n",i);
+		copy(d__1,d__2,*n);
+		numProcs=i;
+		start[index]=omp_get_wtime();
+		merge_sort(0,*n,d__2,*n);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
+	}
+	printf("归并排序结束……\n");
 
-copy(d__1,d__2,*n);
-	//16线程并行归并排序
-	numProcs=omp_get_num_procs();
-	start[1]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
-	stop[1]=omp_get_wtime();
-	time[1]=stop[1]-start[1];
+// copy(d__1,d__2,*n);
+// 	//16线程并行归并排序
+// 	numProcs=omp_get_num_procs();
+// 	start[1]=omp_get_wtime();
+// 	merge_sort(0,*n,d__2,*n);
+// 	stop[1]=omp_get_wtime();
+// 	time[1]=stop[1]-start[1];
 
-copy(d__1,d__2,*n);
-	//31线程并行归并排序
-	numProcs=2*omp_get_num_procs()-1;
-	start[2]=omp_get_wtime();
-	merge_sort(0,*n,d__2,*n);
-	stop[2]=omp_get_wtime();
-	time[2]=stop[2]-start[2];
+// copy(d__1,d__2,*n);
+// 	//31线程并行归并排序
+// 	numProcs=2*omp_get_num_procs()-1;
+// 	start[2]=omp_get_wtime();
+// 	merge_sort(0,*n,d__2,*n);
+// 	stop[2]=omp_get_wtime();
+// 	time[2]=stop[2]-start[2];
 
 printf("原函数并行排序开始……\n");
 copy(d__1,d__2,*n);
