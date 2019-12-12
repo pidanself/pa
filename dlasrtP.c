@@ -1095,7 +1095,7 @@ double *test(int N){
 	info=(int *)malloc(sizeof(int)*(1));
 	*id='I';
 	//测量时间的参数
-	int nums=11;
+	int nums=6;
 	int index=0;
 	double start[nums],stop[nums];
 	double *time=(double *)malloc(sizeof(double)*(nums));
@@ -1136,70 +1136,66 @@ double *test(int N){
 		index++;
 	}
 	printf("归并排序结束……\n");
+	return time;
+}
 
-// copy(d__1,d__2,*n);
-// 	//16线程并行归并排序
-// 	numProcs=omp_get_num_procs();
-// 	start[1]=omp_get_wtime();
-// 	merge_sort(0,*n,d__2,*n);
-// 	stop[1]=omp_get_wtime();
-// 	time[1]=stop[1]-start[1];
+double *testQ(int N){
+	int *n;
+	n=(int *)malloc(sizeof(int)*(1));
+	//测量时间的参数
+	int nums=5;
+	int index=0;
+	double start[nums],stop[nums];
+	double *time=(double *)malloc(sizeof(double)*(nums));
+	*n=N;
+	
+	double *d__2;
+	d__2 =(double *)malloc(sizeof(double)*(*n+2));
+	memcpy(d__2,d__1,(*n)*sizeof(double));
+		//原函数并行（2线程）
+		start[index]=omp_get_wtime();
+		QuickSortParallel(d__2,0,*n-1);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
 
-// copy(d__1,d__2,*n);
-// 	//31线程并行归并排序
-// 	numProcs=2*omp_get_num_procs()-1;
-// 	start[2]=omp_get_wtime();
-// 	merge_sort(0,*n,d__2,*n);
-// 	stop[2]=omp_get_wtime();
-// 	time[2]=stop[2]-start[2];
+	memcpy(d__2,d__1,(*n)*sizeof(double));
+		//原函数并行（4线程）
+		start[index]=omp_get_wtime();
+		QuickSortParallel4Core(d__2,0,*n-1);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
 
-printf("原函数并行排序开始……\n");
-memcpy(d__2,d__1,(*n)*sizeof(double));
-	//原函数并行（2线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+	memcpy(d__2,d__1,(*n)*sizeof(double));
+		//原函数并行（8线程）
+		start[index]=omp_get_wtime();
+		QuickSortParallel8Core(d__2,0,*n-1);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
 
-memcpy(d__2,d__1,(*n)*sizeof(double));
-	//原函数并行（4线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel4Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+	memcpy(d__2,d__1,(*n)*sizeof(double));
+		//原函数并行（16线程）
+		start[index]=omp_get_wtime();
+		QuickSortParallel16Core(d__2,0,*n-1);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
 
-memcpy(d__2,d__1,(*n)*sizeof(double));
-	//原函数并行（8线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel8Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
-
-memcpy(d__2,d__1,(*n)*sizeof(double));
-	//原函数并行（16线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel16Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
-
-memcpy(d__2,d__1,(*n)*sizeof(double));
-	//原函数并行（32线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel32Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
-printf("原函数并行排序结束……\n");
-
+	memcpy(d__2,d__1,(*n)*sizeof(double));
+		//原函数并行（32线程）
+		start[index]=omp_get_wtime();
+		QuickSortParallel32Core(d__2,0,*n-1);
+		stop[index]=omp_get_wtime();
+		time[index]=stop[index]-start[index];
+		index++;
+	
 	return time;
 }
 
 int main(){
-	double time[8];
+	double time[11];
 	printf("开始生成随机数……\n");
 	d__1=vecGene(50);
 	printf("随机数生成成功……\n");
@@ -1220,9 +1216,13 @@ int main(){
 		}
 		//做三次计算
 		for(int j=0;j<3;j++){
-			double *temp=test(N[i]);
-			for(int jj=0;jj<(sizeof(time)/sizeof(double));jj++){
-				time[jj]+=temp[jj];
+			double *temp1=test(N[i]);
+			double *temp2=testQ(N[i]);
+			for(int jj=0;jj<6;jj++){
+				time[jj]+=temp1[jj];
+			}
+			for(int jj=6;jj<11;jj++){
+				time[jj]+=temp1[jj];
 			}
 		}
 		//输出到xls表格
