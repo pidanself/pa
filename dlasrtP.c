@@ -1140,46 +1140,46 @@ double *test(int N){
 // 	stop[2]=omp_get_wtime();
 // 	time[2]=stop[2]-start[2];
 
-printf("原函数并行排序开始……\n");
-copy(d__1,d__2,*n);
-	//原函数并行（2线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+// printf("原函数并行排序开始……\n");
+// copy(d__1,d__2,*n);
+// 	//原函数并行（2线程）
+// 	start[index]=omp_get_wtime();
+// 	QuickSortParallel(d__2,0,*n-1);
+// 	stop[index]=omp_get_wtime();
+// 	time[index]=stop[index]-start[index];
+// 	index++;
 
-copy(d__1,d__2,*n);
-	//原函数并行（4线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel4Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+// copy(d__1,d__2,*n);
+// 	//原函数并行（4线程）
+// 	start[index]=omp_get_wtime();
+// 	QuickSortParallel4Core(d__2,0,*n-1);
+// 	stop[index]=omp_get_wtime();
+// 	time[index]=stop[index]-start[index];
+// 	index++;
 
-copy(d__1,d__2,*n);
-	//原函数并行（8线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel8Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+// copy(d__1,d__2,*n);
+// 	//原函数并行（8线程）
+// 	start[index]=omp_get_wtime();
+// 	QuickSortParallel8Core(d__2,0,*n-1);
+// 	stop[index]=omp_get_wtime();
+// 	time[index]=stop[index]-start[index];
+// 	index++;
 
-copy(d__1,d__2,*n);
-	//原函数并行（16线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel16Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+// copy(d__1,d__2,*n);
+// 	//原函数并行（16线程）
+// 	start[index]=omp_get_wtime();
+// 	QuickSortParallel16Core(d__2,0,*n-1);
+// 	stop[index]=omp_get_wtime();
+// 	time[index]=stop[index]-start[index];
+// 	index++;
 
-copy(d__1,d__2,*n);
-	//原函数并行（32线程）
-	start[index]=omp_get_wtime();
-	QuickSortParallel32Core(d__2,0,*n-1);
-	stop[index]=omp_get_wtime();
-	time[index]=stop[index]-start[index];
-	index++;
+// copy(d__1,d__2,*n);
+// 	//原函数并行（32线程）
+// 	start[index]=omp_get_wtime();
+// 	QuickSortParallel32Core(d__2,0,*n-1);
+// 	stop[index]=omp_get_wtime();
+// 	time[index]=stop[index]-start[index];
+// 	index++;
 printf("原函数并行排序结束……\n");
 
 	return time;
