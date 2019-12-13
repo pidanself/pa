@@ -1077,14 +1077,6 @@ void merge_sort(int l, int r, double* data, int N) {
     }
 }
 
-//我真是作死要自己写拷贝函数
-void copy(double* d__1,double* d__2,int n){
-	for(int i=0;i<n;i++){
-		printf("第%d个\n",i);
-		d__2[i]=d__1[i];
-	}
-}
-
 double *test(int N){
 	
 	char *id;
@@ -1112,7 +1104,7 @@ double *test(int N){
 	//前面排除没有任何问题
 	// printf("创建数完成！");
 
-	printf("原函数排序开始……\n");
+	// printf("原函数排序开始……\n");
 	//原函数
 	start[index]=omp_get_wtime();
 	// printf("开始排序……\n");
@@ -1121,12 +1113,12 @@ double *test(int N){
 	stop[index]=omp_get_wtime();
 	time[index]=stop[index]-start[index];
 	index++;
-	printf("原函数排序结束……\n");
+	// printf("原函数排序结束……\n");
 
-	printf("归并排序开始……\n");
+	// printf("归并排序开始……\n");
 	//并行归并排序：2、4、8、16、32
 	for(int i=2;i<=2*omp_get_num_procs();i=i*2){
-		printf("%d\n",i);
+		// printf("%d\n",i);
 		memcpy(d__2,d__1,(*n)*sizeof(double));
 		numProcs=i;
 		start[index]=omp_get_wtime();
@@ -1135,7 +1127,7 @@ double *test(int N){
 		time[index]=stop[index]-start[index];
 		index++;
 	}
-	printf("归并排序结束……\n");
+	// printf("归并排序结束……\n");
 	return time;
 }
 
@@ -1196,9 +1188,9 @@ double *testQ(int N){
 
 int main(){
 	double time[11];
-	printf("开始生成随机数……\n");
+	// printf("开始生成随机数……\n");
 	d__1=vecGene(50);
-	printf("随机数生成成功……\n");
+	// printf("随机数生成成功……\n");
 	//打开xls文件
 	FILE *fp = NULL ;
 	fp = fopen("sortData.xls","w") ;
@@ -1206,7 +1198,7 @@ int main(){
 	//6-16线程并行原函数，7-31线程并行原函数
     fprintf(fp,"n           kind\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n") ;
 	//40～2000000000
-	int N[]={40};//,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000};//,2000000000};
+	int N[]={40,80,160,320,640,1000};//,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000};//,2000000000};
 	
 	for(int i=0;i<sizeof(N)/sizeof(int);i++){
 		fprintf(fp,"%d\t",N[i]) ;
