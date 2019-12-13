@@ -1189,7 +1189,7 @@ double *testQ(int N){
 int main(){
 	double time[11];
 	// printf("开始生成随机数……\n");
-	d__1=vecGene(50);
+	d__1=vecGene(2000);
 	// printf("随机数生成成功……\n");
 	//打开xls文件
 	FILE *fp = NULL ;
