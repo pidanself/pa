@@ -1204,7 +1204,7 @@ int main(){
 	fp = fopen("sortData.xls","w") ;
 	//0-原函数，1-16线程并行归并，2-31线程并行归并，3-2线程并行原函数，4-4线程并行原函数，5-8线程并行原函数
 	//6-16线程并行原函数，7-31线程并行原函数
-    fprintf(fp,"n           kind\t0\t1\t2\t3\t4\t5\t6\t7\n") ;
+    fprintf(fp,"n           kind\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\n") ;
 	//40～2000000000
 	int N[]={40};//,80,160,320,640,1000,2000,4000,8000,16000,20000,40000,80000,100000,500000,1000000,2000000,6000000,10000000,30000000,60000000,90000000,100000000,500000000,800000000,1000000000};//,2000000000};
 	
@@ -1222,11 +1222,11 @@ int main(){
 				time[jj]+=temp1[jj];
 			}
 			for(int jj=6;jj<11;jj++){
-				time[jj]+=temp1[jj];
+				time[jj]+=temp2[jj-6];
 			}
 		}
 		//输出到xls表格
-		fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",time[0]/3,time[1]/3,time[2]/3,time[3]/3,time[4]/3,time[5]/3,time[6]/3,time[7]/3);
+		fprintf(fp,"%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n",time[0]/3,time[1]/3,time[2]/3,time[3]/3,time[4]/3,time[5]/3,time[6]/3,time[7]/3,time[8]/3,time[9]/3,time[10]/3);
 	}
 	fclose(fp);
 	return 0;
