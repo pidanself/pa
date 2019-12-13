@@ -1216,7 +1216,8 @@ int main(int argc, char* argv[]){
 	char directt[2]={'F','B'};
 	int mh[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	int ml[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
-	int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
+	// int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
+	int numberThreads[12]={13,14,15,16,17,18,19};//缩小范围在16线程数周围进一步测试
 	FILE *fp = NULL ;
 	fp = fopen("testData.xls","w") ;
     fprintf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\n","row: m","col: n","number of threads","side","pivot","direct","speedup" ) ;
