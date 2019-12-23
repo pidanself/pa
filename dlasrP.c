@@ -1226,22 +1226,15 @@ int main(int argc, char* argv[]){
 	printf("开始测试:\n");
 	//遍历测试测试情况
 	for(int i=0;i<sizeof(sidet)/sizeof(char);i++){
-		//printf("0\n");
 		for(int j=0;j<sizeof(pivott)/sizeof(char);j++){
-			//printf("1\n");
-			//for(int k=0;k<2;k++){
 				for(int p=0;p<sizeof(mh)/sizeof(int);p++){
-					//printf("2\n");
 					for(int q=0;q<sizeof(ml)/sizeof(int);q++){
-						//printf("3\n");
-						//printf("%d\n",procsNum);
 						//改造线程数，取1、2、4、8、……核数、核数*2
 						for(int nt=1;nt<=procsNum*2;nt=nt*2)
 						{
-							printf("4\n");
 							numberthreads=nt;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
-							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],procsNum,sidet[i],pivott[j],directt[0],t) ;
+							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],nt,sidet[i],pivott[j],directt[0],t) ;
 							// goto finish;
 						}
 					}
