@@ -1217,23 +1217,25 @@ int main(int argc, char* argv[]){
 	int mh[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	int ml[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	// int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
-	int numberThreads[12]={13,14,15,16,17,18,19};//缩小范围在16线程数周围进一步测试
+	//int numberThreads[12]={13,14,15,16,17,18,19};//缩小范围在16线程数周围进一步测试
+	int procsNum=omp_get_num_procs();
 	FILE *fp = NULL ;
 	fp = fopen("testData.xls","w") ;
     fprintf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\n","row: m","col: n","number of threads","side","pivot","direct","speedup" ) ;
 
 	printf("开始测试:\n");
 	//遍历测试测试情况
-	for(int i=0;i<2;i++){
-		for(int j=0;j<3;j++){
+	for(int i=0;i<sizeof(sidet)/sizeof(int);i++){
+		for(int j=0;j<sizeof(pivott)/sizeof(int);j++){
 			//for(int k=0;k<2;k++){
-				for(int p=0;p<9;p++){
-					for(int q=0;q<9;q++){
-						for(int nt=0;nt<12;nt++)
+				for(int p=0;p<sizeof(mh)/sizeof(int);p++){
+					for(int q=0;q<sizeof(ml)/sizeof(int);q++){
+						//改造线程数，取1、2、4、8、……核数、核数*2
+						for(int nt=1;nt<=procsNum*2;nt=nt*2)
 						{
-							numberthreads=numberThreads[nt];
+							numberthreads=procsNum;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
-							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],numberThreads[nt],sidet[i],pivott[j],directt[0],t) ;
+							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],procsNum,sidet[i],pivott[j],directt[0],t) ;
 							// goto finish;
 						}
 					}
