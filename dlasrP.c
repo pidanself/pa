@@ -1214,8 +1214,8 @@ int main(int argc, char* argv[]){
 	char sidet[2]={'L','R'};
 	char pivott[3]={'V','T','B'};
 	char directt[2]={'F','B'};
-	int mh[9]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
-	int ml[9]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
+	int mh[1]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
+	int ml[1]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	// int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
 	//int numberThreads[12]={13,14,15,16,17,18,19};//缩小范围在16线程数周围进一步测试
 	int procsNum=omp_get_num_procs();
@@ -1233,7 +1233,8 @@ int main(int argc, char* argv[]){
 						//改造线程数，取1、2、4、8、……核数、核数*2
 						for(int nt=1;nt<=procsNum*2;nt=nt*2)
 						{
-							numberthreads=procsNum;
+							printf("线程数为n:%d\n",nt);
+							numberthreads=nt;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
 							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],procsNum,sidet[i],pivott[j],directt[0],t) ;
 							// goto finish;
