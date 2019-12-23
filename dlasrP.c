@@ -1187,7 +1187,7 @@ int main(int argc, char* argv[]){
 	printf("请输入maxn的大小:\n");
 	int maxn;
 	//scanf("%d",&maxn);
-	maxn=40000;
+	maxn=20;
 	printf("开始生成各项参数:\n");
 	//生成对应的参数
 	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
@@ -1214,8 +1214,8 @@ int main(int argc, char* argv[]){
 	char sidet[2]={'L','R'};
 	char pivott[3]={'V','T','B'};
 	char directt[2]={'F','B'};
-	int mh[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
-	int ml[9]={10,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
+	int mh[9]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
+	int ml[9]={10};//,100,1000,3000,6000 ,10000 ,15000 ,20000 ,30000};
 	// int numberThreads[12]={2 ,6 ,10 ,14 ,18 ,22 ,26 ,30 ,32 ,34 ,36 ,40};
 	//int numberThreads[12]={13,14,15,16,17,18,19};//缩小范围在16线程数周围进一步测试
 	int procsNum=omp_get_num_procs();
