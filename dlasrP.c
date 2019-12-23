@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include <time.h>
+#include<string.h>
 #define max(a,b) ((a)>(b)?(a):(b))
 #define min(a,b) ((a)<(b)?(a):(b))
 int numberthreads;
@@ -1152,7 +1153,6 @@ double test1(char *side, char *pivot, char *direct, int *m, int *n){
 		// printf("%c,%c,%c:\n",*side,*pivot,*direct);
 		double start[2],stop[2];
 		double time[2];
-		
 		start[1]=omp_get_wtime();
 		dlasr_(side, pivot, direct, m, n, c__g, sg, atg, m);
 		stop[1]=omp_get_wtime();
@@ -1203,14 +1203,8 @@ int main(int argc, char* argv[]){
 	//生成maxn*maxn的矩阵
 	printf("开始生成二维矩阵……\n");
 	matGene(ag,maxn,maxn,maxn);
-
-	for(int j=0;j<maxn;j++){
-		for(int i=0;i<maxn;i++){
-			atg[j+i*(maxn)]=ag[j+i*(maxn)];
-		}
-	}
-
-
+	memcpy(atg,ag,(maxn*maxn)*sizeof(int));
+	
 	char sidet[2]={'L','R'};
 	char pivott[3]={'V','T','B'};
 	char directt[2]={'F','B'};
@@ -1235,7 +1229,6 @@ int main(int argc, char* argv[]){
 							numberthreads=nt;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
 							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],nt,sidet[i],pivott[j],directt[0],t) ;
-							// goto finish;
 						}
 					}
 				}
@@ -1243,6 +1236,5 @@ int main(int argc, char* argv[]){
 		}
 	}
 	fclose(fp);
-finish:
 	return 0;
 }
