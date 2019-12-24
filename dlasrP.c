@@ -1224,7 +1224,7 @@ int main(int argc, char* argv[]){
 				for(int p=0;p<sizeof(mh)/sizeof(int);p++){
 					for(int q=0;q<sizeof(ml)/sizeof(int);q++){
 						//改造线程数，取1、2、4、8、……核数、核数*2
-						for(int nt=1;nt<=procsNum*2;nt=nt*2)
+						for(int nt=1;nt<=procsNum;nt=nt*2)
 						{
 							numberthreads=nt;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
