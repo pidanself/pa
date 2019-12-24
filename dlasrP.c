@@ -1187,7 +1187,7 @@ int main(int argc, char* argv[]){
 	printf("请输入maxn的大小:\n");
 	int maxn;
 	//scanf("%d",&maxn);
-	maxn=20;
+	maxn=31000;
 	printf("开始生成各项参数:\n");
 	//生成对应的参数
 	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
@@ -1196,12 +1196,12 @@ int main(int argc, char* argv[]){
 	sg =(double *)malloc(sizeof(double)*(maxn+2));
 
 	//generate
-	printf("开始生成第一个一维……\n");
+	//printf("开始生成第一个一维……\n");
 	vecGene(c__g,maxn);
-	printf("开始生成第二个一维……\n");
+	//printf("开始生成第二个一维……\n");
 	vecGene(sg,maxn);
 	//生成maxn*maxn的矩阵
-	printf("开始生成二维矩阵……\n");
+	//printf("开始生成二维矩阵……\n");
 	matGene(ag,maxn,maxn,maxn);
 	memcpy(atg,ag,(maxn*maxn)*sizeof(int));
 	
@@ -1217,14 +1217,14 @@ int main(int argc, char* argv[]){
 	fp = fopen("testData.xls","w") ;
     fprintf(fp,"%s\t%s\t%s\t%s\t%s\t%s\t%s\n","row: m","col: n","number of threads","side","pivot","direct","speedup" ) ;
 
-	printf("开始测试:\n");
+	//printf("开始测试:\n");
 	//遍历测试测试情况
 	for(int i=0;i<sizeof(sidet)/sizeof(char);i++){
 		for(int j=0;j<sizeof(pivott)/sizeof(char);j++){
 				for(int p=0;p<sizeof(mh)/sizeof(int);p++){
 					for(int q=0;q<sizeof(ml)/sizeof(int);q++){
 						//改造线程数，取1、2、4、8、……核数、核数*2
-						for(int nt=1;nt<=procsNum;nt=nt*2)
+						for(int nt=1;nt<=procsNum*2;nt=nt*2)
 						{
 							numberthreads=nt;
 							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
