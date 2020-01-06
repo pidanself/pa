@@ -19,10 +19,10 @@
 int numberthreads;
 
 //生成对应的参数
-double* ag;
-double* atg;
-double* c__g;
-double* sg;
+float* ag;
+float* atg;
+float* c__g;
+float* sg;
 
 
 int lsame_(char *a, char *b){
@@ -30,7 +30,7 @@ int lsame_(char *a, char *b){
 	else return 0;
 }
 
-void printmatrix(double *t){
+void printmatrix(float *t){
 	for(int i=0;i<5;i++){
 		for(int j=0;j<5;j++){
 			printf("%f,",t[j+i*5]);
@@ -40,28 +40,28 @@ void printmatrix(double *t){
 }
 
 //测试用
-void matGene(double* A, int lda , int m , int n) {
+void matGene(float* A, int lda , int m , int n) {
     srand(time(NULL));
 // #pragma omp parallel for num_threads(10)
     for(int j = 0; j < lda; j++) {
         for (int i = 0; i < n; i++) {
-            double temp=rand()%100;//产生0-RAND_MAX的数
-            double f=(double)rand()/RAND_MAX;//产生0-1的数
+            float temp=rand()%100;//产生0-RAND_MAX的数
+            float f=(float)rand()/RAND_MAX;//产生0-1的数
             A[i * lda + j] = temp*f; //产生A[j][i]
         }
     }
 }
 
-void vecGene(double* A, int size) {
+void vecGene(float* A, int size) {
         srand(time(NULL));
         //猜测生成0-1的数
 #pragma omp parallel for num_threads(10)
         for (int i = 0; i < size; i++) {
-                A[i] = (double)rand()/RAND_MAX; //A[i]
+                A[i] = (float)rand()/RAND_MAX; //A[i]
         }
 }
 
-void matShow(double* A, int size) {
+void matShow(float* A, int size) {
         for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                         printf("%f,",A[i * size + j]);
@@ -70,7 +70,7 @@ void matShow(double* A, int size) {
         }
 }
 
-void vecShow(double* A, int size) {
+void vecShow(float* A, int size) {
         for (int i = 0; i < size; i++) {
                 printf("%f,",A[i]); //A[i]
         }
@@ -78,7 +78,7 @@ void vecShow(double* A, int size) {
 //测试用结束
 
 /* Subroutine */ int dlasr_P(char *side, char *pivot, char *direct, int *m, 
-	 int *n, double *c__, double *s, double *a, int *
+	 int *n, float *c__, float *s, float *a, int *
 	lda)
 {
     /* System generated locals */
@@ -86,8 +86,8 @@ void vecShow(double* A, int size) {
 
     /* Local variables */
     int i__, j, info;
-    double temp;
-    double ctemp, stemp;
+    float temp;
+    float ctemp, stemp;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -658,7 +658,7 @@ void vecShow(double* A, int size) {
 
 //原函数
 /* Subroutine */ int dlasr_(char *side, char *pivot, char *direct, int *m, 
-	 int *n, double *c__, double *s, double *a, int *
+	 int *n, float *c__, float *s, float *a, int *
 	lda)
 {
     /* System generated locals */
@@ -666,8 +666,8 @@ void vecShow(double* A, int size) {
 
     /* Local variables */
     int i__, j, info;
-    double temp;
-    double ctemp, stemp;
+    float temp;
+    float ctemp, stemp;
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -1098,10 +1098,10 @@ void vecShow(double* A, int size) {
 //测试函数
 void test(char *side, char *pivot, char *direct, int *m, 
 	int *n, int *lda){
-		double* a =(double *)malloc(sizeof(double)*((*n)*(*lda)+2));
-		double* at=(double *)malloc(sizeof(double)*((*n)*(*lda)+2));
-        double* c__ =(double *)malloc(sizeof(double)*((*n)+2));
-        double* s =(double *)malloc(sizeof(double)*((*n)+2));
+		float* a =(float *)malloc(sizeof(float)*((*n)*(*lda)+2));
+		float* at=(float *)malloc(sizeof(float)*((*n)*(*lda)+2));
+        float* c__ =(float *)malloc(sizeof(float)*((*n)+2));
+        float* s =(float *)malloc(sizeof(float)*((*n)+2));
 
         //generate
         vecGene(c__,(*n));
@@ -1115,8 +1115,8 @@ void test(char *side, char *pivot, char *direct, int *m,
 			}
 		}
 		printf("%c,%c,%c:\n",*side,*pivot,*direct);
-		double start[2],stop[2];
-		double time[2];
+		float start[2],stop[2];
+		float time[2];
 		
 		start[1]=omp_get_wtime();
 		dlasr_(side, pivot, direct, m, n, c__, s, at, lda);
@@ -1128,7 +1128,7 @@ void test(char *side, char *pivot, char *direct, int *m,
 		stop[0]=omp_get_wtime();
 		time[0]=stop[0]-start[0];
 		
-		double imp=time[1]/time[0];
+		float imp=time[1]/time[0];
         // matShow(a,(*n));
 		// printf("----------------------------------------------\n");
 		// matShow(at,(*n));
@@ -1149,10 +1149,10 @@ void test(char *side, char *pivot, char *direct, int *m,
 
 
 //测试函数
-double test1(char *side, char *pivot, char *direct, int *m, int *n){
+float test1(char *side, char *pivot, char *direct, int *m, int *n){
 		// printf("%c,%c,%c:\n",*side,*pivot,*direct);
-		double start[2],stop[2];
-		double time[2];
+		float start[2],stop[2];
+		float time[2];
 		start[1]=omp_get_wtime();
 		dlasr_(side, pivot, direct, m, n, c__g, sg, atg, m);
 		stop[1]=omp_get_wtime();
@@ -1163,7 +1163,7 @@ double test1(char *side, char *pivot, char *direct, int *m, int *n){
 		stop[0]=omp_get_wtime();
 		time[0]=stop[0]-start[0];
 		
-		double imp=time[1]/time[0];
+		float imp=time[1]/time[0];
         // matShow(a,(*n));
 		// printf("----------------------------------------------\n");
 		// matShow(at,(*n));
@@ -1190,10 +1190,10 @@ int main(int argc, char* argv[]){
 	maxn=31000;
 	printf("开始生成各项参数:\n");
 	//生成对应的参数
-	ag =(double *)malloc(sizeof(double)*(maxn*maxn+2));
-	atg=(double *)malloc(sizeof(double)*(maxn*maxn+2));
-	c__g =(double *)malloc(sizeof(double)*(maxn+2));
-	sg =(double *)malloc(sizeof(double)*(maxn+2));
+	ag =(float *)malloc(sizeof(float)*(maxn*maxn+2));
+	atg=(float *)malloc(sizeof(float)*(maxn*maxn+2));
+	c__g =(float *)malloc(sizeof(float)*(maxn+2));
+	sg =(float *)malloc(sizeof(float)*(maxn+2));
 
 	//generate
 	//printf("开始生成第一个一维……\n");
@@ -1227,7 +1227,7 @@ int main(int argc, char* argv[]){
 						for(int nt=1;nt<=procsNum*2;nt=nt*2)
 						{
 							numberthreads=nt;
-							double t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
+							float t=test1(&sidet[i],&pivott[j],&directt[0],&mh[p],&ml[q]);
 							fprintf(fp,"%d\t%d\t%d\t%c\t%c\t%c\t%f\n",mh[p],ml[q],nt,sidet[i],pivott[j],directt[0],t) ;
 						}
 					}
